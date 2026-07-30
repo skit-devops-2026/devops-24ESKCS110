@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevVault - Your Developer Second Brain</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- Custom JavaScript -->
+    <script src="assets/js/main.js" defer></script>
+    <script>
+      // Customizing Tailwind with theme colors and fonts
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "var(--color-primary)",
+              "text-primary": "var(--color-text-primary)",
+              "text-secondary": "var(--color-text-secondary)",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-bg-light">
+    <!-- Header -->
+    <header
+      id="header"
+      class="header sticky top-0 z-50 bg-white/80 transition-shadow duration-300"
+    >
+      <nav class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7 text-primary">
+            <path d="M12.378 1.602a.75.75 0 00-.756 0L3.366 6.002a.75.75 0 00-.366.648v10.704a.75.75 0 00.366.648l8.256 4.4a.75.75 0 00.756 0l8.256-4.4a.75.75 0 00.366-.648V6.65a.75.75 0 00-.366-.648L12.378 1.602zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" />
+          </svg>
+          <span class="text-xl font-bold text-text-primary">DevVault</span>
+        </a>
+
+        <!-- Navigation -->
+        <div class="flex items-center gap-8">
+          <a href="#features" class="text-sm font-medium text-text-secondary transition hover:text-primary">Features</a>
+          <a href="#how-it-works" class="text-sm font-medium text-text-secondary transition hover:text-primary">How It Works</a>
+          <a href="#" class="text-sm font-medium text-text-secondary transition hover:text-primary">About</a>
+          <a href="#" class="text-sm font-medium text-text-secondary transition hover:text-primary">Contact</a>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-4">
+          <a href="login.html" class="rounded-lg px-4 py-2 text-sm font-medium text-text-secondary transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Login</a>
+          <a href="register.html" class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Get Started</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Hero -->
+      <section id="hero" class="hero-section bg-white">
+        <div class="section-container">
+          <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-slate-50">
+            <p class="text-lg font-medium text-gray-400">Hero Section</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="features-section bg-slate-50">
+        <div class="section-container">
+          <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-white">
+            <p class="text-lg font-medium text-gray-400">Features Section</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works -->
+      <section id="how-it-works" class="how-it-works-section bg-white">
+        <div class="section-container">
+          <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-slate-50">
+            <p class="text-lg font-medium text-gray-400">How It Works Section</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why DevVault -->
+      <section id="why-devvault" class="why-devvault-section bg-slate-50">
+        <div class="section-container">
+          <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-white">
+            <p class="text-lg font-medium text-gray-400">Why DevVault Section</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section id="cta" class="cta-section bg-white">
+        <div class="section-container">
+          <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-slate-50">
+            <p class="text-lg font-medium text-gray-400">CTA Section</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer bg-slate-800 text-white">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="flex h-40 items-center justify-center">
+          <div class="text-lg font-bold text-slate-400">Footer Placeholder</div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+/*
+  Define custom properties (CSS variables) for the theme.
+  This makes it easy to manage the design system from one place.
+*/
+:root {
+  --font-primary: "Poppins", sans-serif;
+  --color-primary: #2563eb;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-bg-light: #f8fafc;
+}
+
+/*
+  Apply base styles and custom utilities using Tailwind's @layer directive.
+  This ensures they are correctly processed by Tailwind's engine.
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: var(--font-primary);
+    color: var(--color-text-primary);
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply mx-auto max-w-7xl px-6 py-20;
+  }
+}
