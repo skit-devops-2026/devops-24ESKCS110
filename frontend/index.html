@@ -10,27 +10,19 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Custom Tailwind Config -->
+    <script src="assets/js/tailwind-config.js"></script>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/hero.css" />
     <!-- Custom JavaScript -->
     <script src="assets/js/main.js" defer></script>
-    <script>
-      // Customizing Tailwind with theme colors and fonts
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: "var(--color-primary)",
-              "text-primary": "var(--color-text-primary)",
-              "text-secondary": "var(--color-text-secondary)",
-            },
-          },
-        },
-      };
-    </script>
+    <script src="assets/js/navbar.js" defer></script>
   </head>
+
+
   <body class="bg-bg-light">
     <!-- Header -->
     <header
@@ -38,7 +30,8 @@
       class="header sticky top-0 z-50 bg-white/80 transition-shadow duration-300"
     >
       <nav class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6">
-        <!-- Logo -->
+        
+        <!-- Logo -->  
         <a href="#" class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7 text-primary">
             <path d="M12.378 1.602a.75.75 0 00-.756 0L3.366 6.002a.75.75 0 00-.366.648v10.704a.75.75 0 00.366.648l8.256 4.4a.75.75 0 00.756 0l8.256-4.4a.75.75 0 00.366-.648V6.65a.75.75 0 00-.366-.648L12.378 1.602zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" />
@@ -46,7 +39,7 @@
           <span class="text-xl font-bold text-text-primary">DevVault</span>
         </a>
 
-        <!-- Navigation -->
+        <!-- Nav Links -->
         <div class="flex items-center gap-8">
           <a href="#features" class="text-sm font-medium text-text-secondary transition hover:text-primary">Features</a>
           <a href="#how-it-works" class="text-sm font-medium text-text-secondary transition hover:text-primary">How It Works</a>
@@ -54,7 +47,7 @@
           <a href="#" class="text-sm font-medium text-text-secondary transition hover:text-primary">Contact</a>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Nav Actions -->
         <div class="flex items-center gap-4">
           <a href="login.html" class="rounded-lg px-4 py-2 text-sm font-medium text-text-secondary transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Login</a>
           <a href="register.html" class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Get Started</a>
@@ -65,16 +58,163 @@
     <!-- Main Content -->
     <main>
       <!-- Hero -->
-      <section id="hero" class="hero-section bg-white">
-        <div class="section-container">
-          <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-slate-50">
-            <p class="text-lg font-medium text-gray-400">Hero Section</p>
+      <section id="hero" class="hero-section">
+        <div class="section-container hero-grid">
+
+          <!-- Left Content -->
+          <div class="hero-content">
+
+            <div class="hero-badge">
+              🚀 Developer Knowledge Management Platform
+            </div>
+
+            <h1 class="hero-title">
+              Stop Forgetting
+              <br />
+              What You Learn.
+            </h1>
+
+            <h2 class="hero-subtitle">
+              Your Developer Second Brain
+            </h2>
+
+            <p class="hero-description">
+              Capture notes, learning resources, reusable code snippets,
+              solved bugs and project ideas inside one organized workspace
+              built for developers.
+            </p>
+
+            <div class="hero-buttons">
+
+              <a href="register.html" class="btn-primary">
+                Get Started
+              </a>
+
+              <a href="#features" class="btn-secondary">
+                View Features
+              </a>
+
+            </div>
+
+            <p class="hero-small-text">
+              Built for Students • Developers • Lifelong Learners
+            </p>
+
           </div>
+
+          <!-- Dashboard Preview -->
+
+          <div class="dashboard-preview">
+
+            <div class="dashboard-window">
+
+              <!-- Top Bar -->
+
+              <div class="window-top">
+
+                <div class="window-dots">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+                </div>
+
+                <h3>DevVault Dashboard</h3>
+
+                <div class="window-icons">
+                  🔍 🔔 👤
+                </div>
+
+              </div>
+
+              <!-- Stats -->
+
+              <div class="stats-grid">
+
+                <div class="stat-card">
+                  <span>Notes</span>
+                  <h4>128</h4>
+                </div>
+
+                <div class="stat-card">
+                  <span>Resources</span>
+                  <h4>54</h4>
+                </div>
+
+                <div class="stat-card">
+                  <span>Snippets</span>
+                  <h4>89</h4>
+                </div>
+
+                <div class="stat-card">
+                  <span>Bug Logs</span>
+                  <h4>27</h4>
+                </div>
+
+              </div>
+
+              <!-- Recent Notes -->
+
+              <div class="dashboard-card">
+
+                <h4>📝 Recent Notes</h4>
+
+                <ul>
+                  <li>React Hooks <span>2 hrs ago</span></li>
+                  <li>JWT Authentication <span>Yesterday</span></li>
+                  <li>MongoDB Aggregation <span>3 days ago</span></li>
+                </ul>
+
+              </div>
+
+              <!-- Snippets -->
+
+              <div class="dashboard-card">
+
+                <h4>💻 Code Snippets</h4>
+
+                <ul>
+                  <li>Express Middleware</li>
+                  <li>Binary Search (C++)</li>
+                  <li>Merge Sort (Python)</li>
+                </ul>
+
+              </div>
+
+              <!-- Bugs -->
+
+              <div class="dashboard-card">
+
+                <h4>🐞 Bug Journal</h4>
+
+                <ul>
+                  <li>CORS Error <span>Solved</span></li>
+                  <li>JWT Expired <span>Solved</span></li>
+                  <li>Mongo Timeout <span>Solved</span></li>
+                </ul>
+
+              </div>
+
+              <!-- Footer -->
+
+              <div class="dashboard-footer">
+
+                <div class="sync-dot"></div>
+
+                <span>
+                  Everything Synced • Just Now
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
       </section>
 
       <!-- Features -->
-      <section id="features" class="features-section bg-slate-50">
+      <section id="features" class="bg-slate-50">
         <div class="section-container">
           <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-white">
             <p class="text-lg font-medium text-gray-400">Features Section</p>
@@ -83,7 +223,7 @@
       </section>
 
       <!-- How It Works -->
-      <section id="how-it-works" class="how-it-works-section bg-white">
+      <section id="how-it-works" class="bg-white">
         <div class="section-container">
           <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-slate-50">
             <p class="text-lg font-medium text-gray-400">How It Works Section</p>
@@ -92,7 +232,7 @@
       </section>
 
       <!-- Why DevVault -->
-      <section id="why-devvault" class="why-devvault-section bg-slate-50">
+      <section id="why-devvault" class="bg-slate-50">
         <div class="section-container">
           <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-white">
             <p class="text-lg font-medium text-gray-400">Why DevVault Section</p>
@@ -101,7 +241,7 @@
       </section>
 
       <!-- CTA -->
-      <section id="cta" class="cta-section bg-white">
+      <section id="cta" class="bg-white">
         <div class="section-container">
           <div class="flex h-80 items-center justify-center rounded-lg border-2 border-dashed bg-slate-50">
             <p class="text-lg font-medium text-gray-400">CTA Section</p>

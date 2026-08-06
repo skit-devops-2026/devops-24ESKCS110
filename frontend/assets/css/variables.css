@@ -1,0 +1,11 @@
+/*
+  Define custom properties (CSS variables) for the theme.
+  This makes it easy to manage the design system from one place.
+*/
+:root {
+  --font-primary: "Poppins", sans-serif;
+  --color-primary: #2563eb;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-bg-light: #f8fafc;
+}
