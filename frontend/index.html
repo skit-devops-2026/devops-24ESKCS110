@@ -1,502 +1,1519 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DevVault - Your Developer Second Brain</title>
+
+    <title>DevVault — Your Developer Second Brain</title>
+
+    <meta name="description"
+        content="DevVault helps developers organize notes, code snippets, resources, bugs, projects, and everything they learn in one intelligent workspace." />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Custom Tailwind Config -->
-    <script src="assets/js/tailwind-config.js"></script>
-    <!-- Tailwind CSS CDN -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <!-- Custom JavaScript -->
-    <script src="assets/js/main.js" defer></script>
-    <script src="assets/js/navbar.js" defer></script>
-  </head>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+
+                    colors: {
+                        primary: '#2563eb',
+                        'primary-dark': '#1d4ed8',
+
+                        success: '#16a34a',
+                        danger: '#dc2626',
+                    },
+
+                    animation: {
+                        'fade-up': 'fadeUp .7s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'floatSlow 8s ease-in-out infinite',
+                        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
+                    },
+
+                    keyframes: {
+
+                        fadeUp: {
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(24px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
+                        },
+
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-10px)'
+                            }
+                        },
+
+                        floatSlow: {
+                            '0%, 100%': {
+                                transform: 'translateY(0) rotate(0deg)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-14px) rotate(1deg)'
+                            }
+                        },
+
+                        pulseSoft: {
+                            '0%, 100%': {
+                                opacity: '.5'
+                            },
+                            '50%': {
+                                opacity: '1'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
 
-  <body class="bg-bg-light">
-    <!-- Header -->
-    <header
-      id="header"
-      class="header sticky top-0 z-50 bg-white/80 transition-shadow duration-300"
-    >
-      <nav class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6">
-        
-        <!-- Logo -->  
-        <a href="#" class="flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7 text-primary">
-            <path d="M12.378 1.602a.75.75 0 00-.756 0L3.366 6.002a.75.75 0 00-.366.648v10.704a.75.75 0 00.366.648l8.256 4.4a.75.75 0 00.756 0l8.256-4.4a.75.75 0 00.366-.648V6.65a.75.75 0 00-.366-.648L12.378 1.602zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" /> 
-          </svg>
-          <span class="text-xl font-bold text-text-primary">DevVault</span>
-        </a>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
 
-        <!-- Nav Links -->
-        <div class="flex items-center gap-8">
-          <a href="#features" class="text-sm font-medium text-text-secondary transition hover:text-primary">Features</a>
-          <a href="#how-it-works" class="text-sm font-medium text-text-secondary transition hover:text-primary">How It Works</a>
-          <a href="#why-devvault" class="text-sm font-medium text-text-secondary transition hover:text-primary">Why DevVault</a>
-        </div>
 
-        <!-- Nav Actions -->
-        <div class="flex items-center gap-4">
-          <a href="login.html" class="text-sm font-medium text-text-secondary transition hover:text-primary">Login</a>
-          <a href="register.html" class="rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Get Started</a>
-        </div>
-      </nav>
-    </header>
+        * {
+            box-sizing: border-box;
+        }
 
-    <!-- Main Content -->
-    <main>
-      <!-- Hero -->
-      <section id="hero" class="bg-slate-50 py-28">
-        <div class="section-container grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
 
-          <!-- Left Content -->
-          <div class="flex flex-col">
+        body {
+            background:
+                radial-gradient(circle at 10% 5%,
+                    rgba(37, 99, 235, 0.10),
+                    transparent 26%),
+                radial-gradient(circle at 90% 15%,
+                    rgba(59, 130, 246, 0.08),
+                    transparent 25%),
+                #f8fafc;
+        }
 
-            <div class="inline-flex self-start rounded-full bg-blue-500/10 px-4 py-2 text-sm font-semibold text-primary">
-              🚀 Developer Knowledge Management Platform
-            </div>
 
-            <h1 class="mt-7 text-5xl font-bold leading-tight text-text-primary md:text-6xl">
-              Stop Forgetting
-              <br />
-              What You Learn.
-            </h1>
+        /* ==========================================
+           Developer grid
+        =========================================== */
 
-            <h2 class="mt-4 text-3xl font-semibold text-primary">
-              Your Developer Second Brain
-            </h2>
+        .grid-background {
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.035) 1px,
+                    transparent 1px),
+                linear-gradient(90deg,
+                    rgba(37, 99, 235, 0.035) 1px,
+                    transparent 1px);
 
-            <p class="mt-6 max-w-xl text-lg leading-relaxed text-text-secondary">
-              Capture notes, learning resources, reusable code snippets,
-              solved bugs and project ideas inside one organized workspace
-              built for developers.
-            </p>
+            background-size: 48px 48px;
+        }
 
-            <div class="mt-9 flex gap-4">
 
-              <a href="register.html" class="rounded-xl bg-primary px-8 py-4 font-semibold text-white shadow-sm transition-transform duration-300 hover:-translate-y-0.5">
-                Get Started
-              </a>
+        /* ==========================================
+           Glass navbar
+        =========================================== */
 
-              <a href="#features" class="rounded-xl border border-slate-300 bg-white px-7 py-4 font-semibold text-text-primary transition-colors duration-300 hover:bg-slate-100">
-                View Features
-              </a>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.78);
 
-            </div>
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
 
-            <p class="mt-8 text-base text-text-secondary">
-              Built for Students • Developers • Lifelong Learners
-            </p>
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
 
-          </div>
 
-          <!-- Dashboard Preview -->
+        /* ==========================================
+           Cards
+        =========================================== */
 
-          <div class="flex justify-center">
+        .soft-card {
+            background: rgba(255, 255, 255, 0.88);
 
-            <div class="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl shadow-slate-200 transition-transform duration-300 hover:-translate-y-2">
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
 
-              <!-- Top Bar -->
+            border: 1px solid rgba(226, 232, 240, 0.9);
 
-              <div class="flex items-center justify-between bg-slate-900 px-5 py-4 text-white">
+            box-shadow:
+                0 20px 60px rgba(15, 23, 42, 0.06),
+                0 4px 12px rgba(15, 23, 42, 0.025);
+        }
 
-                <div class="flex gap-1.5">
-                  <span class="h-3 w-3 rounded-full bg-red-500"></span>
-                  <span class="h-3 w-3 rounded-full bg-amber-500"></span>
-                  <span class="h-3 w-3 rounded-full bg-green-500"></span>
+
+        .feature-card {
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease,
+                border-color .25s ease;
+        }
+
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+
+            border-color: rgba(147, 197, 253, .9);
+
+            box-shadow:
+                0 24px 50px rgba(37, 99, 235, 0.10),
+                0 5px 15px rgba(15, 23, 42, 0.04);
+        }
+
+
+        /* ==========================================
+           Buttons
+        =========================================== */
+
+        .primary-button {
+            background:
+                linear-gradient(135deg,
+                    #2563eb,
+                    #1d4ed8);
+
+            box-shadow:
+                0 10px 24px rgba(37, 99, 235, 0.22);
+
+            transition: all .2s ease;
+        }
+
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 15px 32px rgba(37, 99, 235, 0.28);
+        }
+
+
+        .primary-button:active {
+            transform: translateY(0);
+        }
+
+
+        .secondary-button {
+            transition: all .2s ease;
+        }
+
+
+        .secondary-button:hover {
+            transform: translateY(-2px);
+
+            background: #f8fafc;
+
+            border-color: #cbd5e1;
+
+            box-shadow:
+                0 8px 20px rgba(15, 23, 42, 0.05);
+        }
+
+
+        /* ==========================================
+           Dashboard preview
+        =========================================== */
+
+        .dashboard-window {
+            box-shadow:
+                0 40px 90px rgba(15, 23, 42, 0.12),
+                0 10px 30px rgba(37, 99, 235, 0.08);
+        }
+
+
+        .preview-card {
+            transition: transform .25s ease;
+        }
+
+
+        .preview-card:hover {
+            transform: translateY(-3px);
+        }
+
+
+        /* ==========================================
+           Text gradient
+        =========================================== */
+
+        .text-gradient {
+            background:
+                linear-gradient(135deg,
+                    #2563eb,
+                    #4f46e5);
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        /* ==========================================
+           Section spacing
+        =========================================== */
+
+        .section {
+            scroll-margin-top: 100px;
+        }
+
+
+        /* ==========================================
+           Mobile menu
+        =========================================== */
+
+        #mobileMenu {
+            transition:
+                opacity .2s ease,
+                transform .2s ease;
+        }
+    </style>
+
+</head>
+
+
+<body class="font-sans text-slate-800">
+
+
+    <!-- ==========================================
+         Background
+    =========================================== -->
+
+    <div class="grid-background fixed inset-0 pointer-events-none"></div>
+
+
+    <!-- Ambient glow -->
+
+    <div class="pointer-events-none fixed -left-40 top-40 h-96 w-96 rounded-full bg-blue-400/10 blur-3xl"></div>
+
+    <div class="pointer-events-none fixed -right-40 top-[45%] h-96 w-96 rounded-full bg-indigo-400/10 blur-3xl"></div>
+
+
+    <!-- ==========================================
+         NAVBAR
+    =========================================== -->
+
+    <header class="glass-nav fixed inset-x-0 top-0 z-50">
+
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
+
+
+            <!-- Logo -->
+
+            <a href="index.html" class="flex items-center gap-3">
+
+                <div
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-blue-500/20">
+
+                    <i data-lucide="vault" class="h-4 w-4"></i>
+
                 </div>
 
-                <h3 class="text-base">DevVault Dashboard</h3>
 
-                <div>
-                  🔍 🔔 👤
-                </div>
-
-              </div>
-
-              <!-- Stats -->
-
-              <div class="grid grid-cols-4 gap-3 p-5">
-
-                <div class="rounded-xl bg-slate-50 p-3.5 text-center">
-                  <span class="block text-xs text-text-secondary">Notes</span>
-                  <h4 class="mt-1 text-xl text-primary">128</h4>
-                </div>
-
-                <div class="rounded-xl bg-slate-50 p-3.5 text-center">
-                  <span class="block text-xs text-text-secondary">Resources</span>
-                  <h4 class="mt-1 text-xl text-primary">54</h4>
-                </div>
-
-                <div class="rounded-xl bg-slate-50 p-3.5 text-center">
-                  <span class="block text-xs text-text-secondary">Snippets</span>
-                  <h4 class="mt-1 text-xl text-primary">89</h4>
-                </div>
-
-                <div class="rounded-xl bg-slate-50 p-3.5 text-center">
-                  <span class="block text-xs text-text-secondary">Bug Logs</span>
-                  <h4 class="mt-1 text-xl text-primary">27</h4>
-                </div>
-
-              </div>
-
-              <!-- Recent Notes -->
-
-              <div class="mx-5 mb-4 rounded-2xl bg-slate-50 p-4">
-
-                <h4 class="mb-3.5">📝 Recent Notes</h4>
-
-                <ul>
-                  <li class="flex justify-between border-b border-slate-200 py-2 text-sm text-text-primary">React Hooks <span class="text-xs text-text-secondary">2 hrs ago</span></li>
-                  <li class="flex justify-between border-b border-slate-200 py-2 text-sm text-text-primary">JWT Authentication <span class="text-xs text-text-secondary">Yesterday</span></li>
-                  <li class="flex justify-between py-2 text-sm text-text-primary">MongoDB Aggregation <span class="text-xs text-text-secondary">3 days ago</span></li>
-                </ul>
-
-              </div>
-
-              <!-- Snippets -->
-
-              <div class="mx-5 mb-4 rounded-2xl bg-slate-50 p-4">
-
-                <h4 class="mb-3.5">💻 Code Snippets</h4>
-
-                <ul>
-                  <li class="flex justify-between border-b border-slate-200 py-2 text-sm text-text-primary">Express Middleware <span class="text-xs text-text-secondary">JavaScript</span></li>
-                  <li class="flex justify-between border-b border-slate-200 py-2 text-sm text-text-primary">Binary Search <span class="text-xs text-text-secondary">C++</span></li>
-                  <li class="flex justify-between py-2 text-sm text-text-primary">Merge Sort <span class="text-xs text-text-secondary">Python</span></li>
-                </ul>
-
-              </div>
-
-              <!-- Bugs -->
-
-              <div class="mx-5 mb-4 rounded-2xl bg-slate-50 p-4">
-
-                <h4 class="mb-3.5">🐞 Bug Journal</h4>
-
-                <ul>
-                  <li class="flex justify-between border-b border-slate-200 py-2 text-sm text-text-primary">CORS Error <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">Solved</span></li>
-                  <li class="flex justify-between border-b border-slate-200 py-2 text-sm text-text-primary">JWT Expired <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">Solved</span></li>
-                  <li class="flex justify-between py-2 text-sm text-text-primary">Mongo Timeout <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">Solved</span></li>
-                </ul>
-
-              </div>
-
-              <!-- Footer -->
-
-              <div class="flex items-center justify-center gap-3 border-t border-slate-200 p-5 text-sm text-text-secondary">
-
-                <div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
-
-                <span>
-                  Everything Synced • Just Now
+                <span class="text-xl font-bold tracking-tight text-slate-900">
+                    DevVault
                 </span>
 
-              </div>
+            </a>
+
+
+            <!-- Desktop navigation -->
+
+            <nav class="hidden items-center gap-7 md:flex">
+
+                <a href="#features" class="text-sm font-medium text-slate-500 transition hover:text-slate-900">
+                    Features
+                </a>
+
+                <a href="#workspace" class="text-sm font-medium text-slate-500 transition hover:text-slate-900">
+                    Workspace
+                </a>
+
+                <a href="#how-it-works" class="text-sm font-medium text-slate-500 transition hover:text-slate-900">
+                    How it works
+                </a>
+
+            </nav>
+
+
+            <!-- Desktop actions -->
+
+            <div class="hidden items-center gap-3 md:flex">
+
+                <a href="login.html" class="px-3 py-2 text-sm font-medium text-slate-600 transition hover:text-primary">
+                    Log in
+                </a>
+
+                <a href="register.html"
+                    class="primary-button inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white">
+                    Get started
+
+                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
+
+                </a>
 
             </div>
 
-          </div>
+
+            <!-- Mobile menu button -->
+
+            <button id="menuButton" type="button"
+                class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 md:hidden"
+                aria-label="Open menu">
+
+                <i data-lucide="menu" class="h-5 w-5"></i>
+
+            </button>
 
         </div>
-      </section>
 
-      <!-- Features -->
-      <section id="features" class="bg-slate-50">
-        <div class="section-container text-center">
-          <!-- Section Header -->
-          <div class="flex flex-col items-center">
-            <div class="inline-flex self-center rounded-full bg-blue-500/10 px-4 py-2 text-sm font-semibold text-primary">
-              ✨ Core Features
-            </div>
-            <h2 class="mt-6 text-4xl font-bold text-text-primary md:text-5xl">
-              Everything You Need to Stay Organized
-            </h2>
-            <p class="mt-5 max-w-3xl text-lg leading-relaxed text-text-secondary">
-              DevVault helps developers keep their notes, code snippets, learning resources, bug fixes, and project ideas organized in one place.
-            </p>
-          </div>
 
-          <!-- Features Grid -->
-          <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <!-- Feature 1: Notes -->
-            <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div class="text-5xl">📝</div>
-              <h3 class="mt-5 text-xl font-bold text-text-primary">Notes</h3>
-              <p class="mt-2 text-base text-text-secondary">Store personal notes from courses, tutorials, books, and documentation.</p>
-            </div>
+        <!-- Mobile menu -->
 
-            <!-- Feature 2: Code Snippets -->
-            <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div class="text-5xl">💻</div>
-              <h3 class="mt-5 text-xl font-bold text-text-primary">Code Snippets</h3>
-              <p class="mt-2 text-base text-text-secondary">Save reusable code snippets with proper organization for quick access.</p>
-            </div>
+        <div id="mobileMenu" class="hidden border-t border-slate-200 bg-white/95 px-5 py-5 backdrop-blur-xl md:hidden">
 
-            <!-- Feature 3: Learning Resources -->
-            <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div class="text-5xl">📚</div>
-              <h3 class="mt-5 text-xl font-bold text-text-primary">Learning Resources</h3>
-              <p class="mt-2 text-base text-text-secondary">Keep useful articles, videos, documentation, and websites in one place.</p>
+            <div class="flex flex-col gap-1">
+
+                <a href="#features" class="rounded-lg px-3 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50">
+                    Features
+                </a>
+
+                <a href="#workspace" class="rounded-lg px-3 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50">
+                    Workspace
+                </a>
+
+                <a href="#how-it-works"
+                    class="rounded-lg px-3 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50">
+                    How it works
+                </a>
+
+                <div class="my-2 h-px bg-slate-200"></div>
+
+                <a href="login.html" class="rounded-lg px-3 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50">
+                    Log in
+                </a>
+
+                <a href="register.html"
+                    class="primary-button mt-1 flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold text-white">
+                    Get started
+                </a>
+
             </div>
 
-            <!-- Feature 4: Bug Journal -->
-            <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div class="text-5xl">🐞</div>
-              <h3 class="mt-5 text-xl font-bold text-text-primary">Bug Journal</h3>
-              <p class="mt-2 text-base text-text-secondary">Record solved bugs along with their causes and solutions for future reference.</p>
-            </div>
-
-            <!-- Feature 5: Project Vault -->
-            <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div class="text-5xl">📁</div>
-              <h3 class="mt-5 text-xl font-bold text-text-primary">Project Vault</h3>
-              <p class="mt-2 text-base text-text-secondary">Manage project ideas, documentation, and development resources.</p>
-            </div>
-
-            <!-- Feature 6: Smart Search -->
-            <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-              <div class="text-5xl">🔍</div>
-              <h3 class="mt-5 text-xl font-bold text-text-primary">Smart Search</h3>
-              <p class="mt-2 text-base text-text-secondary">Quickly search across all notes, snippets, bugs, and resources.</p>
-            </div>
-          </div>
-
-          <!-- Bottom Text -->
-          <p class="mt-16 text-lg text-text-secondary">
-            "Everything you learn deserves to be remembered."
-          </p>
         </div>
-      </section>
 
-      <!-- How It Works -->
-      <section id="how-it-works" class="bg-white text-center">
-        <div class="section-container">
-          <!-- Section Header -->
-          <div class="flex flex-col items-center">
-            <div class="inline-flex self-center rounded-full bg-blue-500/10 px-4 py-2 text-sm font-semibold text-primary">
-              ⚙️ Workflow
+    </header>
+
+
+    <!-- ==========================================
+         HERO
+    =========================================== -->
+
+    <main>
+
+
+        <section class="relative overflow-hidden px-5 pb-20 pt-36 sm:px-6 sm:pb-28 sm:pt-40 lg:px-8">
+
+            <div class="mx-auto max-w-7xl">
+
+                <div class="mx-auto max-w-4xl text-center">
+
+
+                    <!-- Small badge -->
+
+                    <div
+                        class="mb-7 inline-flex animate-fade-up items-center gap-2 rounded-full border border-blue-100 bg-white/80 px-3.5 py-2 text-xs font-medium text-blue-700 shadow-sm">
+
+                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-blue-50">
+
+                            <i data-lucide="sparkles" class="h-3 w-3"></i>
+
+                        </span>
+
+                        Built for developers who love organized knowledge
+
+                    </div>
+
+
+                    <!-- Hero heading -->
+
+                    <h1 class="animate-fade-up text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-7xl"
+                        style="animation-delay: .08s">
+
+                        Your developer
+
+                        <span class="text-gradient">
+                            second brain.
+                        </span>
+
+                    </h1>
+
+
+                    <!-- Hero description -->
+
+                    <p class="mx-auto mt-6 max-w-2xl animate-fade-up text-base leading-7 text-slate-500 sm:text-lg"
+                        style="animation-delay: .16s">
+
+                        Save what you learn. Organize what you build.
+                        Find everything when you need it.
+
+                        DevVault brings your notes, code snippets,
+                        resources, bugs, and projects into one focused
+                        developer workspace.
+
+                    </p>
+
+
+                    <!-- CTA -->
+
+                    <div class="mt-9 flex animate-fade-up flex-col items-center justify-center gap-3 sm:flex-row"
+                        style="animation-delay: .24s">
+
+                        <a href="register.html"
+                            class="primary-button inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold text-white sm:w-auto">
+
+                            Start building your vault
+
+                            <i data-lucide="arrow-right" class="h-4 w-4"></i>
+
+                        </a>
+
+
+                        <a href="#workspace"
+                            class="secondary-button inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 sm:w-auto">
+
+                            See the workspace
+
+                            <i data-lucide="play" class="h-4 w-4"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Trust line -->
+
+                    <div class="mt-7 flex animate-fade-up items-center justify-center gap-2 text-xs text-slate-400"
+                        style="animation-delay: .32s">
+
+                        <i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i>
+
+                        Simple, private, and built around your workflow.
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     Dashboard preview
+                =========================================== -->
+
+                <div id="workspace" class="section relative mx-auto mt-16 max-w-6xl animate-fade-up"
+                    style="animation-delay: .38s">
+
+
+                    <!-- Glow behind dashboard -->
+
+                    <div class="absolute inset-x-20 top-10 h-64 rounded-full bg-blue-500/10 blur-3xl"></div>
+
+
+                    <div class="dashboard-window relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
+
+
+                        <!-- Browser bar -->
+
+                        <div
+                            class="flex h-12 items-center justify-between border-b border-slate-200 bg-slate-50/80 px-4">
+
+                            <div class="flex items-center gap-1.5">
+
+                                <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+                                <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+                                <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+
+                            </div>
+
+
+                            <div
+                                class="hidden items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-1.5 text-[10px] text-slate-400 sm:flex">
+
+                                <i data-lucide="lock" class="h-3 w-3"></i>
+
+                                app.devvault.local
+
+                            </div>
+
+
+                            <div class="w-10"></div>
+
+                        </div>
+
+
+                        <!-- Dashboard -->
+
+                        <div class="flex min-h-[420px]">
+
+
+                            <!-- Sidebar -->
+
+                            <aside class="hidden w-52 border-r border-slate-200 bg-slate-50/60 p-4 sm:block">
+
+                                <div class="mb-6 flex items-center gap-2">
+
+                                    <div
+                                        class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-white">
+
+                                        <i data-lucide="vault" class="h-3.5 w-3.5"></i>
+
+                                    </div>
+
+                                    <span class="text-sm font-semibold text-slate-800">
+                                        DevVault
+                                    </span>
+
+                                </div>
+
+
+                                <div class="space-y-1">
+
+                                    <div
+                                        class="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700">
+
+                                        <i data-lucide="layout-dashboard" class="h-3.5 w-3.5"></i>
+
+                                        Overview
+
+                                    </div>
+
+                                    <div class="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-500">
+
+                                        <i data-lucide="file-text" class="h-3.5 w-3.5"></i>
+
+                                        Notes
+
+                                    </div>
+
+                                    <div class="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-500">
+
+                                        <i data-lucide="code-2" class="h-3.5 w-3.5"></i>
+
+                                        Snippets
+
+                                    </div>
+
+                                    <div class="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-500">
+
+                                        <i data-lucide="bookmark" class="h-3.5 w-3.5"></i>
+
+                                        Resources
+
+                                    </div>
+
+                                    <div class="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-500">
+
+                                        <i data-lucide="bug" class="h-3.5 w-3.5"></i>
+
+                                        Bug Journal
+
+                                    </div>
+
+                                    <div class="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-slate-500">
+
+                                        <i data-lucide="folder-kanban" class="h-3.5 w-3.5"></i>
+
+                                        Projects
+
+                                    </div>
+
+                                </div>
+
+                            </aside>
+
+
+                            <!-- Main dashboard -->
+
+                            <div class="flex-1 bg-white p-5 sm:p-7">
+
+
+                                <!-- Dashboard heading -->
+
+                                <div class="flex items-start justify-between gap-4">
+
+                                    <div>
+
+                                        <p class="text-[10px] font-medium uppercase tracking-wider text-blue-600">
+                                            Your workspace
+                                        </p>
+
+                                        <h3 class="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
+                                            Good morning, developer.
+                                        </h3>
+
+                                        <p class="mt-1 text-xs text-slate-400">
+                                            Here's what's happening in your vault.
+                                        </p>
+
+                                    </div>
+
+
+                                    <div
+                                        class="hidden h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600 sm:flex">
+
+                                        <i data-lucide="bell" class="h-4 w-4"></i>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Search -->
+
+                                <div
+                                    class="mt-6 flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs text-slate-400">
+
+                                    <i data-lucide="search" class="h-4 w-4"></i>
+
+                                    Search your vault...
+
+                                    <span
+                                        class="ml-auto hidden rounded border border-slate-200 bg-white px-1.5 py-0.5 text-[9px] sm:block">
+                                        ⌘ K
+                                    </span>
+
+                                </div>
+
+
+                                <!-- Stats -->
+
+                                <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+
+                                    <div class="preview-card rounded-xl border border-slate-200 bg-white p-3">
+
+                                        <div
+                                            class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+
+                                            <i data-lucide="file-text" class="h-3.5 w-3.5"></i>
+
+                                        </div>
+
+                                        <p class="mt-3 text-xl font-bold text-slate-900">
+                                            128
+                                        </p>
+
+                                        <p class="text-[10px] text-slate-400">
+                                            Notes
+                                        </p>
+
+                                    </div>
+
+
+                                    <div class="preview-card rounded-xl border border-slate-200 bg-white p-3">
+
+                                        <div
+                                            class="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+
+                                            <i data-lucide="code-2" class="h-3.5 w-3.5"></i>
+
+                                        </div>
+
+                                        <p class="mt-3 text-xl font-bold text-slate-900">
+                                            64
+                                        </p>
+
+                                        <p class="text-[10px] text-slate-400">
+                                            Snippets
+                                        </p>
+
+                                    </div>
+
+
+                                    <div class="preview-card rounded-xl border border-slate-200 bg-white p-3">
+
+                                        <div
+                                            class="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+
+                                            <i data-lucide="bookmark" class="h-3.5 w-3.5"></i>
+
+                                        </div>
+
+                                        <p class="mt-3 text-xl font-bold text-slate-900">
+                                            42
+                                        </p>
+
+                                        <p class="text-[10px] text-slate-400">
+                                            Resources
+                                        </p>
+
+                                    </div>
+
+
+                                    <div class="preview-card rounded-xl border border-slate-200 bg-white p-3">
+
+                                        <div
+                                            class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+
+                                            <i data-lucide="folder-kanban" class="h-3.5 w-3.5"></i>
+
+                                        </div>
+
+                                        <p class="mt-3 text-xl font-bold text-slate-900">
+                                            12
+                                        </p>
+
+                                        <p class="text-[10px] text-slate-400">
+                                            Projects
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Recent activity -->
+
+                                <div class="mt-5 grid gap-4 lg:grid-cols-3">
+
+                                    <div class="rounded-xl border border-slate-200 p-4 lg:col-span-2">
+
+                                        <div class="flex items-center justify-between">
+
+                                            <h4 class="text-xs font-semibold text-slate-800">
+                                                Recent notes
+                                            </h4>
+
+                                            <span class="text-[10px] font-medium text-blue-600">
+                                                View all
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="mt-4 space-y-3">
+
+                                            <div class="flex items-center gap-3">
+
+                                                <div
+                                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+
+                                                    <i data-lucide="braces" class="h-3.5 w-3.5"></i>
+
+                                                </div>
+
+                                                <div class="min-w-0">
+
+                                                    <p class="truncate text-xs font-medium text-slate-700">
+                                                        Understanding async JavaScript
+                                                    </p>
+
+                                                    <p class="mt-0.5 text-[10px] text-slate-400">
+                                                        JavaScript · 2 hours ago
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="flex items-center gap-3">
+
+                                                <div
+                                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+
+                                                    <i data-lucide="database" class="h-3.5 w-3.5"></i>
+
+                                                </div>
+
+                                                <div class="min-w-0">
+
+                                                    <p class="truncate text-xs font-medium text-slate-700">
+                                                        PostgreSQL indexing notes
+                                                    </p>
+
+                                                    <p class="mt-0.5 text-[10px] text-slate-400">
+                                                        Database · Yesterday
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="flex items-center gap-3">
+
+                                                <div
+                                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+
+                                                    <i data-lucide="terminal" class="h-3.5 w-3.5"></i>
+
+                                                </div>
+
+                                                <div class="min-w-0">
+
+                                                    <p class="truncate text-xs font-medium text-slate-700">
+                                                        Docker commands I always forget
+                                                    </p>
+
+                                                    <p class="mt-0.5 text-[10px] text-slate-400">
+                                                        DevOps · 2 days ago
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Quick capture -->
+
+                                    <div
+                                        class="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+
+                                        <div
+                                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm">
+
+                                            <i data-lucide="zap" class="h-4 w-4"></i>
+
+                                        </div>
+
+                                        <h4 class="mt-4 text-xs font-semibold text-slate-800">
+                                            Capture an idea
+                                        </h4>
+
+                                        <p class="mt-1 text-[10px] leading-5 text-slate-500">
+                                            Quickly save something before it disappears from your head.
+                                        </p>
+
+                                        <button
+                                            class="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-[10px] font-semibold text-white shadow-sm">
+
+                                            <i data-lucide="plus" class="h-3 w-3"></i>
+
+                                            New note
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
-            <h2 class="mt-6 text-4xl font-bold text-text-primary md:text-5xl">
-              How DevVault Works
-            </h2>
-            <p class="mt-5 max-w-2xl text-lg leading-relaxed text-text-secondary">
-              Organize your learning in four simple steps and never lose important knowledge again.
-            </p>
-          </div>
 
-          <!-- Workflow Steps -->
-          <div class="relative mt-16">
-            <!-- Connecting Line -->
-            <div class="absolute left-0 top-1/2 hidden w-full -translate-y-1/2 border-t-2 border-dashed border-slate-300 lg:block"></div>
+        </section>
 
-            <!-- Grid Container -->
-            <div class="relative grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
-              <!-- Step 1: Capture -->
-              <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-primary">①</div>
-                <div class="text-5xl">📥</div>
-                <h3 class="mt-5 text-xl font-bold text-text-primary">Capture</h3>
-                <p class="mt-2 text-base text-text-secondary">Save notes, code snippets, useful links, bug fixes, and project ideas whenever you learn something new.</p>
-              </div>
 
-              <!-- Step 2: Organize -->
-              <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-primary">②</div>
-                <div class="text-5xl">📂</div>
-                <h3 class="mt-5 text-xl font-bold text-text-primary">Organize</h3>
-                <p class="mt-2 text-base text-text-secondary">Group everything into categories so your knowledge stays structured and easy to manage.</p>
-              </div>
+        <!-- ==========================================
+             FEATURES
+        =========================================== -->
 
-              <!-- Step 3: Search -->
-              <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-primary">③</div>
-                <div class="text-5xl">🔍</div>
-                <h3 class="mt-5 text-xl font-bold text-text-primary">Search</h3>
-                <p class="mt-2 text-base text-text-secondary">Instantly find your saved content using quick search instead of scrolling through files.</p>
-              </div>
+        <section id="features"
+            class="section border-t border-slate-200/70 bg-white/50 px-5 py-20 sm:px-6 sm:py-24 lg:px-8">
 
-              <!-- Step 4: Reuse -->
-              <div class="transform rounded-xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-primary">④</div>
-                <div class="text-5xl">🚀</div>
-                <h3 class="mt-5 text-xl font-bold text-text-primary">Reuse</h3>
-                <p class="mt-2 text-base text-text-secondary">Access your knowledge whenever you start a new project or prepare for interviews and exams.</p>
-              </div>
+            <div class="mx-auto max-w-7xl">
+
+
+                <div class="mx-auto max-w-2xl text-center">
+
+                    <span class="text-xs font-semibold uppercase tracking-widest text-blue-600">
+                        Everything in one place
+                    </span>
+
+                    <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                        Your knowledge.
+                        <span class="text-gradient">
+                            Organized.
+                        </span>
+                    </h2>
+
+                    <p class="mt-4 text-sm leading-6 text-slate-500 sm:text-base">
+                        Stop scattering useful information across bookmarks,
+                        random files, tabs, and forgotten notes.
+                    </p>
+
+                </div>
+
+
+                <!-- Feature grid -->
+
+                <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+
+                    <!-- Notes -->
+
+                    <div class="feature-card soft-card rounded-2xl p-6">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+
+                            <i data-lucide="file-text" class="h-5 w-5"></i>
+
+                        </div>
+
+                        <h3 class="mt-5 text-base font-semibold text-slate-900">
+                            Notes
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Capture concepts, explanations, ideas,
+                            and things you don't want to relearn.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Snippets -->
+
+                    <div class="feature-card soft-card rounded-2xl p-6">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+
+                            <i data-lucide="code-2" class="h-5 w-5"></i>
+
+                        </div>
+
+                        <h3 class="mt-5 text-base font-semibold text-slate-900">
+                            Code Snippets
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Store useful commands, functions, patterns,
+                            and reusable code without losing context.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Resources -->
+
+                    <div class="feature-card soft-card rounded-2xl p-6">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+
+                            <i data-lucide="bookmark" class="h-5 w-5"></i>
+
+                        </div>
+
+                        <h3 class="mt-5 text-base font-semibold text-slate-900">
+                            Resources
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Keep tutorials, documentation, articles,
+                            tools, and references close at hand.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Bug Journal -->
+
+                    <div class="feature-card soft-card rounded-2xl p-6">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-50 text-red-600">
+
+                            <i data-lucide="bug" class="h-5 w-5"></i>
+
+                        </div>
+
+                        <h3 class="mt-5 text-base font-semibold text-slate-900">
+                            Bug Journal
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Record bugs, solutions, errors, and debugging
+                            lessons so you don't solve the same problem twice.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Projects -->
+
+                    <div class="feature-card soft-card rounded-2xl p-6">
+
+                        <div
+                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+
+                            <i data-lucide="folder-kanban" class="h-5 w-5"></i>
+
+                        </div>
+
+                        <h3 class="mt-5 text-base font-semibold text-slate-900">
+                            Project Vault
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Keep project-specific notes, decisions,
+                            links, and knowledge together.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Search -->
+
+                    <div class="feature-card soft-card rounded-2xl p-6">
+
+                        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+
+                            <i data-lucide="search" class="h-5 w-5"></i>
+
+                        </div>
+
+                        <h3 class="mt-5 text-base font-semibold text-slate-900">
+                            Global Search
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-slate-500">
+                            Find the exact thing you're looking for
+                            without digging through dozens of tabs.
+                        </p>
+
+                    </div>
+
+                </div>
+
             </div>
-          </div>
 
-          <!-- Bottom Quote -->
-          <div class="mt-16 rounded-xl bg-slate-100/80 p-8">
-            <p class="text-xl italic leading-relaxed text-text-secondary">
-              "The best developers don't remember everything. <br class="hidden sm:block" />
-              They know where to find everything."
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Why DevVault -->
-      <section id="why-devvault" class="bg-slate-50 text-center">
-        <div class="section-container">
-          <!-- Section Header -->
-          <div class="flex flex-col items-center">
-            <div class="inline-flex self-center rounded-full bg-blue-500/10 px-4 py-2 text-sm font-semibold text-primary">
-              💡 Why DevVault
+
+        <!-- ==========================================
+             HOW IT WORKS
+        =========================================== -->
+
+        <section id="how-it-works" class="section px-5 py-20 sm:px-6 sm:py-24 lg:px-8">
+
+            <div class="mx-auto max-w-7xl">
+
+                <div class="grid items-center gap-12 lg:grid-cols-2">
+
+
+                    <!-- Text -->
+
+                    <div>
+
+                        <span class="text-xs font-semibold uppercase tracking-widest text-blue-600">
+                            Simple workflow
+                        </span>
+
+                        <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                            Turn scattered knowledge
+                            into a system.
+                        </h2>
+
+                        <p class="mt-5 max-w-lg text-sm leading-7 text-slate-500 sm:text-base">
+                            DevVault is designed around the way developers
+                            actually learn: discover something, save it,
+                            use it, debug it, and eventually teach it.
+                        </p>
+
+
+                        <!-- Steps -->
+
+                        <div class="mt-8 space-y-5">
+
+
+                            <div class="flex gap-4">
+
+                                <div
+                                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-sm font-bold text-blue-600">
+                                    01
+                                </div>
+
+                                <div>
+
+                                    <h3 class="text-sm font-semibold text-slate-900">
+                                        Capture
+                                    </h3>
+
+                                    <p class="mt-1 text-sm leading-6 text-slate-500">
+                                        Save notes, snippets, links, bugs,
+                                        and ideas while you're working.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex gap-4">
+
+                                <div
+                                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-sm font-bold text-blue-600">
+                                    02
+                                </div>
+
+                                <div>
+
+                                    <h3 class="text-sm font-semibold text-slate-900">
+                                        Organize
+                                    </h3>
+
+                                    <p class="mt-1 text-sm leading-6 text-slate-500">
+                                        Keep everything categorized and
+                                        connected to the projects where it matters.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex gap-4">
+
+                                <div
+                                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-sm font-bold text-blue-600">
+                                    03
+                                </div>
+
+                                <div>
+
+                                    <h3 class="text-sm font-semibold text-slate-900">
+                                        Retrieve
+                                    </h3>
+
+                                    <p class="mt-1 text-sm leading-6 text-slate-500">
+                                        Search your entire developer brain
+                                        whenever you need an answer.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Visual -->
+
+                    <div class="relative">
+
+                        <div class="absolute -inset-5 rounded-3xl bg-blue-500/5 blur-2xl"></div>
+
+
+                        <div class="soft-card relative rounded-2xl p-5 sm:p-6">
+
+                            <div class="flex items-center justify-between">
+
+                                <div>
+
+                                    <p class="text-[10px] uppercase tracking-widest text-blue-600">
+                                        Knowledge graph
+                                    </p>
+
+                                    <h3 class="mt-1 text-lg font-bold text-slate-900">
+                                        Everything connects.
+                                    </h3>
+
+                                </div>
+
+                                <div
+                                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+
+                                    <i data-lucide="network" class="h-4 w-4"></i>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Connection visualization -->
+
+                            <div
+                                class="relative mt-7 h-64 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/70">
+
+                                <div
+                                    class="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-primary text-white shadow-xl shadow-blue-500/20 animate-pulse-soft">
+
+                                    <i data-lucide="vault" class="h-7 w-7"></i>
+
+                                </div>
+
+
+                                <!-- Lines -->
+
+                                <div class="absolute left-[24%] top-[27%] h-px w-[26%] rotate-[25deg] bg-blue-200">
+                                </div>
+
+                                <div class="absolute right-[24%] top-[27%] h-px w-[26%] -rotate-[25deg] bg-blue-200">
+                                </div>
+
+                                <div class="absolute left-[24%] bottom-[27%] h-px w-[26%] -rotate-[25deg] bg-blue-200">
+                                </div>
+
+                                <div class="absolute right-[24%] bottom-[27%] h-px w-[26%] rotate-[25deg] bg-blue-200">
+                                </div>
+
+
+                                <!-- Nodes -->
+
+                                <div
+                                    class="absolute left-[12%] top-[16%] flex h-11 w-11 items-center justify-center rounded-xl border border-blue-100 bg-white text-blue-600 shadow-sm animate-float">
+
+                                    <i data-lucide="file-text" class="h-4 w-4"></i>
+
+                                </div>
+
+
+                                <div
+                                    class="absolute right-[12%] top-[16%] flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100 bg-white text-indigo-600 shadow-sm animate-float-slow">
+
+                                    <i data-lucide="code-2" class="h-4 w-4"></i>
+
+                                </div>
+
+
+                                <div
+                                    class="absolute left-[12%] bottom-[16%] flex h-11 w-11 items-center justify-center rounded-xl border border-amber-100 bg-white text-amber-600 shadow-sm animate-float-slow">
+
+                                    <i data-lucide="bookmark" class="h-4 w-4"></i>
+
+                                </div>
+
+
+                                <div
+                                    class="absolute right-[12%] bottom-[16%] flex h-11 w-11 items-center justify-center rounded-xl border border-red-100 bg-white text-red-600 shadow-sm animate-float">
+
+                                    <i data-lucide="bug" class="h-4 w-4"></i>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
-            <h2 class="mt-6 text-4xl font-bold text-text-primary md:text-5xl">
-              Stop Searching. <br class="hidden sm:block" />
-              Start Building.
-            </h2>
-            <p class="mt-5 max-w-3xl text-lg leading-relaxed text-text-secondary">
-              Your knowledge shouldn't be scattered across different platforms. DevVault keeps everything organized so you can focus on building instead of searching.
-            </p>
-          </div>
 
-          <!-- Comparison Grid -->
-          <div class="mt-16 grid grid-cols-1 gap-8 text-left lg:grid-cols-2">
-            <!-- Left Column: Without DevVault -->
-            <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
-              <h3 class="text-2xl font-bold text-text-primary">Without DevVault</h3>
-              <ul class="mt-6 space-y-4">
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">❌</span><span>Notes are scattered across different apps.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">❌</span><span>Important code snippets get lost.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">❌</span><span>Solved bugs are forgotten.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">❌</span><span>Bookmarks become impossible to manage.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">❌</span><span>Valuable learning resources disappear over time.</span></li>
-              </ul>
+        </section>
+
+
+        <!-- ==========================================
+             CTA
+        =========================================== -->
+
+        <section class="px-5 pb-20 sm:px-6 sm:pb-24 lg:px-8">
+
+            <div class="mx-auto max-w-5xl">
+
+                <div
+                    class="relative overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-6 py-14 text-center shadow-sm sm:px-10">
+
+                    <!-- Decorative glow -->
+
+                    <div
+                        class="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-blue-400/10 blur-3xl">
+                    </div>
+
+                    <div
+                        class="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-indigo-400/10 blur-3xl">
+                    </div>
+
+
+                    <div class="relative">
+
+                        <div
+                            class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-blue-500/20">
+
+                            <i data-lucide="vault" class="h-5 w-5"></i>
+
+                        </div>
+
+
+                        <h2 class="mt-6 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                            Your next great idea
+                            deserves a place.
+                        </h2>
+
+
+                        <p class="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-500 sm:text-base">
+                            Start building a developer knowledge base
+                            that grows with every project, bug, and
+                            discovery.
+                        </p>
+
+
+                        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+
+                            <a href="register.html"
+                                class="primary-button inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold text-white">
+
+                                Create your vault
+
+                                <i data-lucide="arrow-right" class="h-4 w-4"></i>
+
+                            </a>
+
+
+                            <a href="login.html"
+                                class="secondary-button inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700">
+                                I already have an account
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <!-- Right Column: With DevVault -->
-            <div class="rounded-xl border border-green-200 bg-white p-8 shadow-sm">
-              <h3 class="text-2xl font-bold text-text-primary">With DevVault</h3>
-              <ul class="mt-6 space-y-4">
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">✅</span><span>Everything stored in one place.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">✅</span><span>Fast search across all knowledge.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">✅</span><span>Reuse previous solutions instantly.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">✅</span><span>Organize projects efficiently.</span></li>
-                <li class="flex items-start gap-3 text-text-secondary"><span class="mt-1">✅</span><span>Build your personal developer knowledge base.</span></li>
-              </ul>
-            </div>
-          </div>
+        </section>
 
-          <!-- Bottom Message -->
-          <div class="mt-16 rounded-xl bg-slate-100/80 p-10">
-            <h3 class="text-3xl font-bold text-text-primary">One Workspace. Every Learning.</h3>
-            <p class="mx-auto mt-4 max-w-2xl text-lg text-text-secondary">DevVault grows with your developer journey by keeping everything organized, searchable, and ready whenever you need it.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- CTA -->
-      <section id="cta" class="bg-slate-50 text-center">
-        <div class="section-container">
-          <!-- CTA Card -->
-          <div class="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-12 shadow-sm">
-            <div class="inline-flex self-center rounded-full bg-blue-500/10 px-4 py-2 text-sm font-semibold text-primary">
-              🚀 Get Started
-            </div>
-            <h2 class="mt-6 text-4xl font-bold text-text-primary md:text-5xl">
-              Start Building Your Developer <br class="hidden sm:block" />
-              Knowledge Base Today
-            </h2>
-            <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-text-secondary">
-              Create your free DevVault account and keep your notes, code snippets, resources, bug solutions, and project ideas organized in one place.
-            </p>
-
-            <!-- Buttons -->
-            <div class="mt-9 flex justify-center gap-4">
-              <a href="register.html" class="rounded-xl bg-blue-700 px-7 py-4 font-semibold text-white shadow-sm transition-transform duration-300 hover:-translate-y-0.5">Get Started</a>
-              <a href="login.html" class="rounded-xl border border-slate-300 bg-white px-7 py-4 font-semibold text-text-primary transition-colors duration-300 hover:bg-slate-100">Login</a>
-            </div>
-
-            <p class="mt-6 text-sm text-text-secondary">No credit card required • Free for students</p>
-          </div>
-
-          <!-- Bottom Highlight -->
-          <div class="mx-auto mt-8 flex max-w-lg flex-wrap items-center justify-center gap-x-8 gap-y-2 rounded-full bg-slate-100/80 px-6 py-3">
-            <span class="text-sm font-medium text-text-secondary">📝 Notes</span>
-            <span class="text-sm font-medium text-text-secondary">💻 Snippets</span>
-            <span class="text-sm font-medium text-text-secondary">📚 Resources</span>
-            <span class="text-sm font-medium text-text-secondary">🐞 Bug Journal</span>
-          </div>
-        </div>
-      </section>
     </main>
 
-    <!-- Footer -->
-    <footer id="footer" class="bg-slate-800 text-white">
-      <div class="section-container">
-        <!-- Main Footer Content (4 columns) -->
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <!-- Column 1: Project Info -->
-          <div>
-            <a href="#" class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7 text-white">
-                <path d="M12.378 1.602a.75.75 0 00-.756 0L3.366 6.002a.75.75 0 00-.366.648v10.704a.75.75 0 00.366.648l8.256 4.4a.75.75 0 00.756 0l8.256-4.4a.75.75 0 00.366-.648V6.65a.75.75 0 00-.366-.648L12.378 1.602zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" />
-              </svg>
-              <span class="text-xl font-bold text-white">DevVault</span>
-            </a>
-            <p class="mt-4 text-sm text-slate-400">Your Developer Second Brain</p>
-            <p class="mt-2 text-sm text-slate-400">Organize your notes, code snippets, learning resources, bug journal, and projects in one place.</p>
-          </div>
 
-          <!-- Column 2: Navigation -->
-          <div>
-            <h3 class="text-lg font-semibold text-white">Navigation</h3>
-            <ul class="mt-4 space-y-2">
-              <li><a href="#" class="text-sm text-slate-400 transition-colors hover:text-primary">Home</a></li>
-              <li><a href="#features" class="text-sm text-slate-400 transition-colors hover:text-primary">Features</a></li>
-              <li><a href="#how-it-works" class="text-sm text-slate-400 transition-colors hover:text-primary">How It Works</a></li>
-              <li><a href="#why-devvault" class="text-sm text-slate-400 transition-colors hover:text-primary">Why DevVault</a></li>
-            </ul>
-          </div>
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
 
-          <!-- Column 3: Account -->
-          <div>
-            <h3 class="text-lg font-semibold text-white">Account</h3>
-            <ul class="mt-4 space-y-2">
-              <li><a href="login.html" class="text-sm text-slate-400 transition-colors hover:text-primary">Login</a></li>
-              <li><a href="register.html" class="text-sm text-slate-400 transition-colors hover:text-primary">Register</a></li>
-              <li><a href="#" class="text-sm text-slate-400 transition-colors hover:text-primary">Dashboard</a></li>
-            </ul>
-          </div>
+    <footer class="border-t border-slate-200 bg-white/70 px-5 py-10 sm:px-6 lg:px-8">
 
-          <!-- Column 4: Project -->
-          <div>
-            <h3 class="text-lg font-semibold text-white">Built With</h3>
-            <ul class="mt-4 space-y-2">
-              <li class="text-sm text-slate-400">HTML5</li>
-              <li class="text-sm text-slate-400">Tailwind CSS</li>
-              <li class="text-sm text-slate-400">JavaScript</li>
-              <li class="text-sm text-slate-400">React</li>
-              <li class="text-sm text-slate-400">Express.js</li>
-              <li class="text-sm text-slate-400">MongoDB</li>
-            </ul>
-          </div>
+        <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 sm:flex-row">
+
+            <div class="flex items-center gap-2">
+
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
+
+                    <i data-lucide="vault" class="h-3.5 w-3.5"></i>
+
+                </div>
+
+                <span class="text-sm font-semibold text-slate-800">
+                    DevVault
+                </span>
+
+            </div>
+
+
+            <p class="text-xs text-slate-400">
+                Your developer second brain.
+            </p>
+
+
+            <div class="flex items-center gap-5 text-xs text-slate-400">
+
+                <a href="#" class="transition hover:text-slate-700">
+                    Privacy
+                </a>
+
+                <a href="#" class="transition hover:text-slate-700">
+                    Terms
+                </a>
+
+                <a href="login.html" class="transition hover:text-slate-700">
+                    Login
+                </a>
+
+            </div>
+
         </div>
 
-        <!-- Horizontal Divider -->
-        <div class="mt-16 border-t border-slate-700 pt-8">
-          <!-- Bottom Footer Row -->
-          <div class="flex flex-col items-center justify-between gap-4 text-sm text-slate-400 md:flex-row">
-            <!-- Left Side -->
-            <p>© 2026 DevVault. All rights reserved.</p>
-            <!-- Right Side -->
-            <p>Built as a Full Stack Development Semester Project.</p>
-          </div>
+
+        <div class="mx-auto mt-7 max-w-7xl border-t border-slate-200 pt-6 text-center text-[11px] text-slate-400">
+            © 2026 DevVault. Built for developers.
         </div>
-      </div>
+
     </footer>
-  </body>
+
+
+    <!-- ==========================================
+         JavaScript
+    =========================================== -->
+
+    <script>
+
+        lucide.createIcons();
+
+
+        /* ==========================================
+           Mobile menu
+        =========================================== */
+
+        const menuButton =
+            document.getElementById("menuButton");
+
+        const mobileMenu =
+            document.getElementById("mobileMenu");
+
+
+        menuButton.addEventListener(
+            "click",
+            () => {
+
+                mobileMenu.classList.toggle("hidden");
+
+                const isOpen =
+                    !mobileMenu.classList.contains("hidden");
+
+                menuButton.innerHTML =
+                    isOpen
+                        ? '<i data-lucide="x" class="h-5 w-5"></i>'
+                        : '<i data-lucide="menu" class="h-5 w-5"></i>';
+
+                lucide.createIcons();
+
+            }
+        );
+
+
+        /* Close mobile menu after navigation */
+
+        document
+            .querySelectorAll("#mobileMenu a")
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        mobileMenu.classList.add("hidden");
+
+                        menuButton.innerHTML =
+                            '<i data-lucide="menu" class="h-5 w-5"></i>';
+
+                        lucide.createIcons();
+
+                    }
+                );
+
+            });
+
+    </script>
+
+</body>
+
 </html>
