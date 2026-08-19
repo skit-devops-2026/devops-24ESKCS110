@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Create Account — DevVault</title>
+
+    <meta
+        name="description"
+        content="Create your DevVault account and start building your developer second brain."
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+
+                    colors: {
+                        primary: '#2563eb',
+                        success: '#16a34a',
+                        danger: '#dc2626',
+                    },
+
+                    animation: {
+                        'fade-up': 'fadeUp .6s ease-out forwards',
+                        'float': 'float 7s ease-in-out infinite',
+                    },
+
+                    keyframes: {
+                        fadeUp: {
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(18px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
+                        },
+
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-14px)'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(37, 99, 235, 0.10),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(59, 130, 246, 0.08),
+                    transparent 30%
+                ),
+                #f8fafc;
+        }
+
+
+        /* Subtle grid */
+        .grid-background {
+            background-image:
+                linear-gradient(
+                    rgba(37, 99, 235, 0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(37, 99, 235, 0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 48px 48px;
+        }
+
+
+        /* Main card */
+        .signup-card {
+            background: rgba(255, 255, 255, 0.88);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(226, 232, 240, 0.9);
+
+            box-shadow:
+                0 20px 60px rgba(15, 23, 42, 0.08),
+                0 4px 12px rgba(15, 23, 42, 0.03);
+        }
+
+
+        /* Inputs */
+        .form-input {
+            background: #ffffff;
+
+            border: 1px solid #e2e8f0;
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease,
+                transform .2s ease;
+        }
+
+        .form-input:hover {
+            border-color: #cbd5e1;
+        }
+
+        .form-input:focus {
+            outline: none;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.08);
+
+            transform: translateY(-1px);
+        }
+
+
+        /* Social buttons */
+        .social-button {
+            transition: all .2s ease;
+        }
+
+        .social-button:hover {
+            transform: translateY(-1px);
+
+            border-color: #cbd5e1;
+
+            background: #f8fafc;
+
+            box-shadow:
+                0 5px 15px rgba(15, 23, 42, 0.05);
+        }
+
+
+        /* Main button */
+        .primary-button {
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #1d4ed8
+                );
+
+            box-shadow:
+                0 10px 24px rgba(37, 99, 235, 0.22);
+
+            transition: all .2s ease;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 14px 30px rgba(37, 99, 235, 0.28);
+        }
+
+        .primary-button:active {
+            transform: translateY(0);
+        }
+
+
+        /* Password strength */
+        .strength-bar {
+            transition: all .25s ease;
+        }
+
+    </style>
+
+</head>
+
+
+<body class="min-h-screen font-sans text-slate-800">
+
+
+    <!-- Background grid -->
+    <div
+        class="grid-background fixed inset-0 pointer-events-none"
+    ></div>
+
+
+    <!-- Ambient blobs -->
+
+    <div
+        class="fixed -left-32 -top-32 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl pointer-events-none"
+    ></div>
+
+    <div
+        class="fixed -right-32 bottom-0 h-80 w-80 rounded-full bg-indigo-400/10 blur-3xl pointer-events-none"
+    ></div>
+
+
+    <!-- Main -->
+
+    <main
+        class="relative flex min-h-screen items-center justify-center px-4 py-10 sm:px-6"
+    >
+
+        <div
+            class="w-full max-w-md animate-fade-up"
+        >
+
+
+            <!-- Top navigation -->
+
+            <div
+                class="mb-7 flex items-center justify-between"
+            >
+
+                <a
+                    href="index.html"
+                    class="group inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-primary"
+                >
+
+                    <span
+                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-sm transition group-hover:border-blue-200 group-hover:bg-blue-50"
+                    >
+                        <i
+                            data-lucide="arrow-left"
+                            class="h-4 w-4"
+                        ></i>
+                    </span>
+
+                    Back to home
+
+                </a>
+
+
+                <div
+                    class="flex items-center gap-2 text-xs text-slate-400"
+                >
+
+                    <span
+                        class="h-2 w-2 rounded-full bg-emerald-500"
+                    ></span>
+
+                    Secure signup
+
+                </div>
+
+            </div>
+
+
+            <!-- Brand -->
+
+            <div
+                class="mb-7 text-center"
+            >
+
+                <a
+                    href="index.html"
+                    class="inline-flex items-center gap-3"
+                >
+
+                    <div
+                        class="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-blue-500/20"
+                    >
+
+                        <i
+                            data-lucide="vault"
+                            class="h-5 w-5"
+                        ></i>
+
+                    </div>
+
+
+                    <span
+                        class="text-2xl font-bold tracking-tight text-slate-800"
+                    >
+                        DevVault
+                    </span>
+
+                </a>
+
+
+                <p
+                    class="mt-3 text-sm text-slate-500"
+                >
+                    Build your personal developer second brain.
+                </p>
+
+            </div>
+
+
+            <!-- Card -->
+
+            <section
+                class="signup-card rounded-2xl p-6 sm:p-8"
+            >
+
+
+                <!-- Heading -->
+
+                <div class="mb-7">
+
+                    <h1
+                        class="text-2xl font-bold tracking-tight text-slate-900"
+                    >
+                        Create your account
+                    </h1>
+
+                    <p
+                        class="mt-2 text-sm text-slate-500"
+                    >
+                        Start organizing everything you learn and build.
+                    </p>
+
+                </div>
+
+
+                <!-- Social login -->
+
+                <div
+                    class="grid grid-cols-2 gap-3"
+                >
+
+                    <!-- GitHub -->
+
+                    <button
+                        type="button"
+                        class="social-button flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-700"
+                    >
+
+                        <svg
+                            class="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                        >
+                            <path
+                                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.15c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.27-1.69-1.27-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.67 1.24 3.32.95.1-.74.4-1.24.73-1.52-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.77.11 3.06.73.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.35.78 1.04.78 2.1v3.12c0 .3.21.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                            />
+                        </svg>
+
+                        GitHub
+
+                    </button>
+
+
+                    <!-- Google -->
+
+                    <button
+                        type="button"
+                        class="social-button flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-700"
+                    >
+
+                        <svg
+                            class="h-4 w-4"
+                            viewBox="0 0 24 24"
+                        >
+
+                            <path
+                                fill="#4285F4"
+                                d="M21.35 12.27c0-.77-.07-1.51-.2-2.22H12v4.2h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.69 2.91-4.18 2.91-7.37Z"
+                            />
+
+                            <path
+                                fill="#34A853"
+                                d="M12 21.75c2.63 0 4.84-.87 6.45-2.36l-3.14-2.45c-.87.58-1.98.92-3.31.92-2.54 0-4.69-1.72-5.46-4.03H3.29v2.53A9.75 9.75 0 0 0 12 21.75Z"
+                            />
+
+                            <path
+                                fill="#FBBC05"
+                                d="M6.54 13.83A5.86 5.86 0 0 1 6.23 12c0-.64.11-1.26.31-1.83V7.64H3.29A9.75 9.75 0 0 0 2.25 12c0 1.57.38 3.05 1.04 4.36l3.25-2.53Z"
+                            />
+
+                            <path
+                                fill="#EA4335"
+                                d="M12 6.14c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.2 14.63 2.25 12 2.25a9.75 9.75 0 0 0-8.71 5.39l3.25 2.53C7.31 7.86 9.46 6.14 12 6.14Z"
+                            />
+
+                        </svg>
+
+                        Google
+
+                    </button>
+
+                </div>
+
+
+                <!-- Divider -->
+
+                <div
+                    class="my-6 flex items-center gap-4"
+                >
+
+                    <div
+                        class="h-px flex-1 bg-slate-200"
+                    ></div>
+
+                    <span
+                        class="text-[10px] font-medium tracking-wider text-slate-400"
+                    >
+                        OR SIGN UP WITH EMAIL
+                    </span>
+
+                    <div
+                        class="h-px flex-1 bg-slate-200"
+                    ></div>
+
+                </div>
+
+
+                <!-- Form -->
+
+                <form
+                    action="#"
+                    method="POST"
+                    class="space-y-5"
+                >
+
+
+                    <!-- Full name -->
+
+                    <div>
+
+                        <label
+                            for="name"
+                            class="mb-2 block text-sm font-medium text-slate-700"
+                        >
+                            Full name
+                        </label>
+
+                        <div class="relative">
+
+                            <i
+                                data-lucide="user"
+                                class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                            ></i>
+
+                            <input
+                                id="name"
+                                name="name"
+                                type="text"
+                                autocomplete="name"
+                                placeholder="John Doe"
+                                required
+                                class="form-input h-12 w-full rounded-xl pl-11 pr-4 text-sm text-slate-800 placeholder:text-slate-400"
+                            />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div>
+
+                        <label
+                            for="email"
+                            class="mb-2 block text-sm font-medium text-slate-700"
+                        >
+                            Email address
+                        </label>
+
+                        <div class="relative">
+
+                            <i
+                                data-lucide="mail"
+                                class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                            ></i>
+
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autocomplete="email"
+                                placeholder="you@example.com"
+                                required
+                                class="form-input h-12 w-full rounded-xl pl-11 pr-4 text-sm text-slate-800 placeholder:text-slate-400"
+                            />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div>
+
+                        <label
+                            for="password"
+                            class="mb-2 block text-sm font-medium text-slate-700"
+                        >
+                            Password
+                        </label>
+
+                        <div class="relative">
+
+                            <i
+                                data-lucide="lock"
+                                class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                            ></i>
+
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autocomplete="new-password"
+                                placeholder="Create a strong password"
+                                required
+                                class="form-input h-12 w-full rounded-xl pl-11 pr-12 text-sm text-slate-800 placeholder:text-slate-400"
+                            />
+
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                aria-label="Show password"
+                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-600"
+                            >
+
+                                <i
+                                    data-lucide="eye"
+                                    id="eyeIcon"
+                                    class="h-4 w-4"
+                                ></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- Password strength -->
+
+                        <div
+                            id="passwordStrength"
+                            class="mt-3 hidden"
+                        >
+
+                            <div
+                                class="mb-2 flex gap-1"
+                            >
+
+                                <div
+                                    id="bar1"
+                                    class="strength-bar h-1 flex-1 rounded-full bg-slate-200"
+                                ></div>
+
+                                <div
+                                    id="bar2"
+                                    class="strength-bar h-1 flex-1 rounded-full bg-slate-200"
+                                ></div>
+
+                                <div
+                                    id="bar3"
+                                    class="strength-bar h-1 flex-1 rounded-full bg-slate-200"
+                                ></div>
+
+                                <div
+                                    id="bar4"
+                                    class="strength-bar h-1 flex-1 rounded-full bg-slate-200"
+                                ></div>
+
+                            </div>
+
+                            <p
+                                id="strengthText"
+                                class="text-xs text-slate-400"
+                            >
+                                Password strength
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Terms -->
+
+                    <div>
+
+                        <label
+                            class="flex cursor-pointer items-start gap-3"
+                        >
+
+                            <input
+                                id="terms"
+                                name="terms"
+                                type="checkbox"
+                                required
+                                class="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+                            />
+
+                            <span
+                                class="text-xs leading-5 text-slate-500"
+                            >
+                                I agree to the
+                                <a
+                                    href="#"
+                                    class="font-medium text-primary hover:underline"
+                                >
+                                    Terms of Service
+                                </a>
+                                and
+                                <a
+                                    href="#"
+                                    class="font-medium text-primary hover:underline"
+                                >
+                                    Privacy Policy
+                                </a>.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- Submit -->
+
+                    <button
+                        type="submit"
+                        class="primary-button flex h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-white"
+                    >
+
+                        Create your DevVault
+
+                        <i
+                            data-lucide="arrow-right"
+                            class="h-4 w-4"
+                        ></i>
+
+                    </button>
+
+                </form>
+
+
+                <!-- Login -->
+
+                <p
+                    class="mt-7 text-center text-sm text-slate-500"
+                >
+
+                    Already have an account?
+
+                    <a
+                        href="login.html"
+                        class="font-semibold text-primary transition hover:text-blue-700"
+                    >
+                        Log in
+                    </a>
+
+                </p>
+
+            </section>
+
+
+            <!-- Footer -->
+
+            <div
+                class="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400"
+            >
+
+                <a
+                    href="#"
+                    class="transition hover:text-slate-600"
+                >
+                    Privacy
+                </a>
+
+                <span>•</span>
+
+                <a
+                    href="#"
+                    class="transition hover:text-slate-600"
+                >
+                    Terms
+                </a>
+
+                <span>•</span>
+
+                <span>
+                    © 2026 DevVault
+                </span>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- JavaScript -->
+
+    <script>
+
+        lucide.createIcons();
+
+
+        /* --------------------------------
+           Password visibility
+        -------------------------------- */
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+
+        togglePassword.addEventListener("click", () => {
+
+            const isPassword =
+                passwordInput.type === "password";
+
+
+            passwordInput.type =
+                isPassword ? "text" : "password";
+
+
+            togglePassword.innerHTML =
+                isPassword
+                    ? '<i data-lucide="eye-off" class="h-4 w-4"></i>'
+                    : '<i data-lucide="eye" class="h-4 w-4"></i>';
+
+
+            togglePassword.setAttribute(
+                "aria-label",
+                isPassword
+                    ? "Hide password"
+                    : "Show password"
+            );
+
+
+            lucide.createIcons();
+
+        });
+
+
+
+        /* --------------------------------
+           Password strength
+        -------------------------------- */
+
+        const strengthContainer =
+            document.getElementById("passwordStrength");
+
+        const strengthText =
+            document.getElementById("strengthText");
+
+        const bars = [
+            document.getElementById("bar1"),
+            document.getElementById("bar2"),
+            document.getElementById("bar3"),
+            document.getElementById("bar4")
+        ];
+
+
+        passwordInput.addEventListener(
+            "input",
+            () => {
+
+                const password =
+                    passwordInput.value;
+
+
+                if (!password) {
+
+                    strengthContainer.classList.add("hidden");
+
+                    bars.forEach(bar => {
+                        bar.className =
+                            "strength-bar h-1 flex-1 rounded-full bg-slate-200";
+                    });
+
+                    return;
+                }
+
+
+                strengthContainer.classList.remove("hidden");
+
+
+                let score = 0;
+
+
+                if (password.length >= 8)
+                    score++;
+
+                if (/[A-Z]/.test(password))
+                    score++;
+
+                if (/[0-9]/.test(password))
+                    score++;
+
+                if (/[^A-Za-z0-9]/.test(password))
+                    score++;
+
+
+                bars.forEach((bar, index) => {
+
+                    bar.className =
+                        "strength-bar h-1 flex-1 rounded-full bg-slate-200";
+
+                    if (index < score) {
+
+                        bar.classList.remove(
+                            "bg-slate-200"
+                        );
+
+                        if (score === 1) {
+                            bar.classList.add(
+                                "bg-red-400"
+                            );
+                        }
+
+                        else if (score === 2) {
+                            bar.classList.add(
+                                "bg-amber-400"
+                            );
+                        }
+
+                        else if (score === 3) {
+                            bar.classList.add(
+                                "bg-blue-400"
+                            );
+                        }
+
+                        else {
+                            bar.classList.add(
+                                "bg-emerald-500"
+                            );
+                        }
+
+                    }
+
+                });
+
+
+                const messages = [
+                    "Password strength",
+                    "Weak password",
+                    "Fair password",
+                    "Good password",
+                    "Strong password"
+                ];
+
+
+                strengthText.textContent =
+                    messages[score];
+
+
+                strengthText.className =
+                    "text-xs";
+
+
+                if (score === 1)
+                    strengthText.classList.add(
+                        "text-red-500"
+                    );
+
+                else if (score === 2)
+                    strengthText.classList.add(
+                        "text-amber-500"
+                    );
+
+                else if (score === 3)
+                    strengthText.classList.add(
+                        "text-blue-500"
+                    );
+
+                else if (score === 4)
+                    strengthText.classList.add(
+                        "text-emerald-600"
+                    );
+
+                else
+                    strengthText.classList.add(
+                        "text-slate-400"
+                    );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
