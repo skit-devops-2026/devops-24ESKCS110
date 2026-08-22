@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Notes - DevVault</title>
+    <meta name="description" content="Browse and organize your developer notes in DevVault." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: { primary: '#2563eb', 'primary-dark': '#1d4ed8' },
+                    boxShadow: {
+                        soft: '0 20px 60px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03)',
+                        card: '0 14px 30px rgba(15, 23, 42, 0.08)',
+                    },
+                },
+            },
+        };
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 8% 8%, rgba(37, 99, 235, 0.10), transparent 28%),
+                radial-gradient(circle at 90% 12%, rgba(59, 130, 246, 0.08), transparent 24%),
+                #f8fafc;
+        }
+
+        .grid-background {
+            background-image: linear-gradient(rgba(37, 99, 235, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 99, 235, 0.035) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.92);
+        }
+
+        .nav-item {
+            transition: all .2s ease;
+        }
+
+        .nav-item:hover {
+            transform: translateX(2px);
+        }
+
+        .note-card {
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        }
+
+        .note-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(15, 23, 42, 0.08);
+            border-color: #bfdbfe;
+        }
+
+        .notes-list .note-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .notes-list .note-card>.note-content {
+            display: grid;
+            grid-template-columns: minmax(150px, .45fr) minmax(220px, 1fr) minmax(180px, .6fr);
+            gap: 1rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .notes-list .note-card>.note-content {
+                grid-template-columns: minmax(140px, .5fr) minmax(200px, 1fr);
+            }
+
+            .notes-list .note-card .note-tags {
+                grid-column: 1 / -1;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen font-sans text-slate-800">
+    <div class="grid-background fixed inset-0 pointer-events-none"></div>
+
+    <div class="relative min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
+        <div id="mobileOverlay" class="fixed inset-0 z-30 hidden bg-slate-900/40 backdrop-blur-[2px] lg:hidden"
+            aria-hidden="true"></div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full border-r border-slate-200/70 bg-white/90 p-5 shadow-soft backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:z-10 lg:w-auto lg:translate-x-0 lg:shadow-none"
+            aria-label="Main navigation">
+            <div class="flex h-full flex-col">
+                <div class="mb-8 flex items-center justify-between">
+                    <a href="index.html" class="inline-flex items-center gap-3">
+                        <span
+                            class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark text-white shadow-lg shadow-blue-500/25"><i
+                                data-lucide="vault" class="h-5 w-5"></i></span>
+                        <span class="text-xl font-bold tracking-tight text-slate-800">DevVault</span>
+                    </a>
+                    <button id="closeSidebarBtn" type="button"
+                        class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 lg:hidden"
+                        aria-label="Close sidebar"><i data-lucide="x" class="h-4 w-4"></i></button>
+                </div>
+
+                <nav class="space-y-1.5" aria-label="Sidebar links">
+                    <a href="dashboard.html"
+                        class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><i
+                            data-lucide="layout-dashboard" class="h-4 w-4"></i>Dashboard</a>
+                    <a href="notes.html" aria-current="page"
+                        class="nav-item flex items-center gap-3 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-sm font-semibold text-primary"><i
+                            data-lucide="notebook-pen" class="h-4 w-4"></i>Notes</a>
+                    <a href="snippets.html"
+                        class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><i
+                            data-lucide="code-xml" class="h-4 w-4"></i>Code Snippets</a>
+                    <a href="resources.html"
+                        class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><i
+                            data-lucide="book-marked" class="h-4 w-4"></i>Resources</a>
+                    <a href="bugs.html"
+                        class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><i
+                            data-lucide="bug" class="h-4 w-4"></i>Bug Journal</a>
+                    <a href="projects.html"
+                        class="nav-item flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><i
+                            data-lucide="folder-git-2" class="h-4 w-4"></i>Projects</a>
+                </nav>
+
+                <div class="mt-auto rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                    <div class="mb-3 flex items-center gap-3">
+                        <span
+                            class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-semibold text-primary">D</span>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">Devesh</p>
+                            <p class="text-xs text-slate-500">Computer Science Student</p>
+                        </div>
+                    </div>
+                    <a href="login.html"
+                        class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"><i
+                            data-lucide="log-out" class="h-4 w-4"></i>Logout</a>
+                </div>
+            </div>
+        </aside>
+
+        <div class="relative z-10 min-w-0">
+            <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+                <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+                    <button id="openSidebarBtn" type="button"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 lg:hidden"
+                        aria-label="Open sidebar"><i data-lucide="menu" class="h-5 w-5"></i></button>
+                    <label for="globalSearch" class="relative block w-full max-w-xl">
+                        <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400"><i
+                                data-lucide="search" class="h-4 w-4"></i></span>
+                        <input id="globalSearch" type="search" placeholder="Search your knowledge..."
+                            class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-blue-100" />
+                    </label>
+                    <div
+                        class="ml-auto flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+                        <span
+                            class="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-semibold text-primary">D</span>
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold text-slate-900">Devesh</p>
+                            <p class="text-xs text-slate-500">Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+                <section class="mb-7 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p
+                            class="mb-2 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                            <span class="h-2 w-2 rounded-full bg-primary"></span>Knowledge Base</p>
+                        <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">My Notes</h1>
+                        <p class="mt-2 text-sm text-slate-600 sm:text-base">Capture and organize the knowledge you want
+                            to remember.</p>
+                    </div>
+                    <button id="newNoteBtn" type="button"
+                        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"><i
+                            data-lucide="plus" class="h-4 w-4"></i>New Note</button>
+                </section>
+
+                
+
+                <section id="emptyState"
+                    class="hidden rounded-2xl border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center shadow-sm"
+                    aria-live="polite">
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-primary">
+                        <i data-lucide="notebook-pen" class="h-7 w-7"></i></div>
+                    <h2 class="mt-4 text-lg font-semibold text-slate-900">No notes yet</h2>
+                    <p class="mx-auto mt-2 max-w-md text-sm text-slate-500">Start capturing what you learn and build
+                        your developer knowledge base.</p>
+                    <button type="button"
+                        class="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-primary-dark"><i
+                            data-lucide="plus" class="h-4 w-4"></i>Create Your First Note</button>
+                </section>
+
+                <div class="mt-7 text-center"><button type="button"
+                        class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-blue-200 hover:text-primary"><i
+                            data-lucide="chevron-down" class="h-4 w-4"></i>Load More</button></div>
+            </main>
+        </div>
+    </div>
+
+    <script src="assets/js/notes.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>
