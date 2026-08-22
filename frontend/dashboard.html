@@ -168,6 +168,237 @@
             </div>
         </aside>
 
+        <div class="relative z-10 min-w-0 lg:pl-0">
+            <header class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+                <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+                    <button id="openSidebarBtn" type="button"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 lg:hidden"
+                        aria-label="Open sidebar">
+                        <i data-lucide="menu" class="h-5 w-5"></i>
+                    </button>
+
+                    <label for="globalSearch" class="relative block w-full max-w-xl">
+                        <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+                            <i data-lucide="search" class="h-4 w-4"></i>
+                        </span>
+
+                        <input id="globalSearch" type="search" placeholder="Search your knowledge..."
+                            class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-blue-100" />
+                    </label>
+
+                    <div
+                        class="ml-auto flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+                        <span
+                            class="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-semibold text-primary">D</span>
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold text-slate-900">Devesh</p>
+                            <p class="text-xs text-slate-500">Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+                <section class="glass-card mb-6 overflow-hidden rounded-2xl p-6 shadow-card sm:p-7">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                            <p
+                                class="mb-2 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+                                <span class="h-2 w-2 rounded-full bg-primary"></span>
+                                Dashboard Overview
+                            </p>
+
+                            <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Good morning,
+                                Devesh 👋</h1>
+                            <p class="mt-2 text-sm text-slate-600 sm:text-base">Here's an overview of your developer
+                                knowledge.</p>
+                        </div>
+
+                        <a href="notes.html"
+                            class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                            <i data-lucide="plus" class="h-4 w-4"></i>
+                            Quick Add
+                        </a>
+                    </div>
+                </section>
+
+                <section aria-label="Knowledge statistics" class="mb-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                    <article class="section-card rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Notes</p>
+                        <p class="mt-2 text-3xl font-bold text-slate-900">42</p>
+                        <p class="mt-2 text-xs text-slate-500">Sample overview count</p>
+                    </article>
+
+                    <article class="section-card rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Code Snippets</p>
+                        <p class="mt-2 text-3xl font-bold text-slate-900">25</p>
+                        <p class="mt-2 text-xs text-slate-500">Sample overview count</p>
+                    </article>
+
+                    <article class="section-card rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Resources</p>
+                        <p class="mt-2 text-3xl font-bold text-slate-900">18</p>
+                        <p class="mt-2 text-xs text-slate-500">Sample overview count</p>
+                    </article>
+
+                    <article class="section-card rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Bugs Solved</p>
+                        <p class="mt-2 text-3xl font-bold text-slate-900">9</p>
+                        <p class="mt-2 text-xs text-slate-500">Sample overview count</p>
+                    </article>
+
+                    <article class="section-card rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Projects</p>
+                        <p class="mt-2 text-3xl font-bold text-slate-900">4</p>
+                        <p class="mt-2 text-xs text-slate-500">Sample overview count</p>
+                    </article>
+                </section>
+
+                <section class="mb-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-slate-900">Quick Actions</h2>
+                        <span class="text-xs text-slate-500">Static actions for now</span>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        <a href="notes.html"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                            <i data-lucide="plus" class="h-4 w-4"></i>
+                            Add Note
+                        </a>
+
+                        <a href="snippets.html"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                            <i data-lucide="plus" class="h-4 w-4"></i>
+                            Add Code Snippet
+                        </a>
+
+                        <a href="resources.html"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                            <i data-lucide="plus" class="h-4 w-4"></i>
+                            Add Resource
+                        </a>
+
+                        <a href="bugs.html"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                            <i data-lucide="plus" class="h-4 w-4"></i>
+                            Log Bug
+                        </a>
+                    </div>
+                </section>
+
+                <section class="grid gap-6 lg:grid-cols-2">
+                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                        <div class="mb-4 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-slate-900">Recent Notes</h2>
+                            <a href="notes.html" class="text-sm font-medium text-primary hover:text-primary-dark">View
+                                All</a>
+                        </div>
+
+                        <ul class="space-y-3">
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">React Hooks</p>
+                                <p class="mt-1 text-sm text-slate-600">Category: React</p>
+                                <p class="text-xs text-slate-500">Updated: Today</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">JWT Authentication</p>
+                                <p class="mt-1 text-sm text-slate-600">Category: Backend</p>
+                                <p class="text-xs text-slate-500">Updated: Yesterday</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">MongoDB Indexing</p>
+                                <p class="mt-1 text-sm text-slate-600">Category: Database</p>
+                                <p class="text-xs text-slate-500">Updated: 2 days ago</p>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                        <div class="mb-4 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-slate-900">Recent Code Snippets</h2>
+                            <a href="snippets.html"
+                                class="text-sm font-medium text-primary hover:text-primary-dark">View All</a>
+                        </div>
+
+                        <ul class="space-y-3">
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">Binary Search</p>
+                                <p class="mt-1 text-sm text-slate-600">Language: C++</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">Debounce Function</p>
+                                <p class="mt-1 text-sm text-slate-600">Language: JavaScript</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">Fetch API Helper</p>
+                                <p class="mt-1 text-sm text-slate-600">Language: JavaScript</p>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                        <div class="mb-4 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-slate-900">Recent Resources</h2>
+                            <a href="resources.html"
+                                class="text-sm font-medium text-primary hover:text-primary-dark">View All</a>
+                        </div>
+
+                        <ul class="space-y-3">
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">React Documentation</p>
+                                <p class="mt-1 text-sm text-slate-600">Type: Documentation</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">MDN JavaScript Guide</p>
+                                <p class="mt-1 text-sm text-slate-600">Type: Documentation</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">MongoDB University</p>
+                                <p class="mt-1 text-sm text-slate-600">Type: Course</p>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                        <div class="mb-4 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-slate-900">Recent Bugs</h2>
+                            <a href="bugs.html" class="text-sm font-medium text-primary hover:text-primary-dark">View
+                                All</a>
+                        </div>
+
+                        <ul class="space-y-3">
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">CORS Error</p>
+                                <p
+                                    class="mt-1 inline-flex rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
+                                    Status: Solved</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">JWT Expiry Issue</p>
+                                <p
+                                    class="mt-1 inline-flex rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
+                                    Status: Solved</p>
+                            </li>
+
+                            <li class="rounded-xl border border-slate-200 p-3">
+                                <p class="font-semibold text-slate-900">MongoDB Connection Error</p>
+                                <p
+                                    class="mt-1 inline-flex rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
+                                    Status: Solved</p>
+                            </li>
+                        </ul>
+                    </article>
+                </section>
+            </main>
+        </div>
     </div>
 
     <script src="frontend/assets/js/dashboard.js"></script>
