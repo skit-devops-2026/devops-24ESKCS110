@@ -15,7 +15,9 @@ DevVault is a Developer Knowledge Management Platform that acts as a personal "s
 
 ## Tech stack
 
-- Frontend: <e.g. React>
+- Frontend: HTML, CSS, JavaScript
+- Styling: Tailwind CSS
+- Version Control: Git & GitHub
 - Backend: <e.g. Node.js / Express>
 - Database: <e.g. PostgreSQL>
 
