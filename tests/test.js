@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const requiredFiles = [
-    "frontend/index-does-not-exist.html",
+    "frontend/index.html",
     "frontend/login.html",
     "frontend/register.html",
     "frontend/dashboard.html",
