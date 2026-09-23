@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bug Journal | DevVault</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        'primary-dark': '#1d4ed8'
+                    },
+                    boxShadow: {
+                        soft: '0 10px 30px rgba(15, 23, 42, 0.06)',
+                        card: '0 4px 20px rgba(15, 23, 42, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-800 font-['Poppins']">
+
+    <!-- Background -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/3 -right-32 w-96 h-96 bg-indigo-100/40 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div id="sidebarOverlay"
+         class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden lg:hidden">
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+           class="fixed top-0 left-0 z-40 h-screen w-[280px] bg-white border-r border-slate-200 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+
+        <div class="h-full flex flex-col">
+
+            <!-- Logo -->
+            <div class="h-20 px-6 flex items-center border-b border-slate-100">
+                <a href="dashboard.html" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-200">
+                        <i data-lucide="vault" class="w-5 h-5"></i>
+                    </div>
+
+                    <div>
+                        <h1 class="font-semibold text-lg text-slate-900">DevVault</h1>
+                        <p class="text-[11px] text-slate-400">Developer Second Brain</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+
+                <p class="px-3 mb-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                    Workspace
+                </p>
+
+                <a href="dashboard.html"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition">
+                    <i data-lucide="layout-dashboard" class="w-[18px] h-[18px]"></i>
+                    Dashboard
+                </a>
+
+                <a href="notes.html"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition">
+                    <i data-lucide="notebook-pen" class="w-[18px] h-[18px]"></i>
+                    Notes
+                </a>
+
+                <a href="snippets.html"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition">
+                    <i data-lucide="code-2" class="w-[18px] h-[18px]"></i>
+                    Code Snippets
+                </a>
+
+                <a href="resources.html"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition">
+                    <i data-lucide="library" class="w-[18px] h-[18px]"></i>
+                    Resources
+                </a>
+
+                <a href="bug-journal.html"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-blue-600 bg-blue-50 border-l-2 border-blue-600">
+                    <i data-lucide="bug" class="w-[18px] h-[18px]"></i>
+                    Bug Journal
+                </a>
+
+                <a href="projects.html"
+                   class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition">
+                    <i data-lucide="folder-kanban" class="w-[18px] h-[18px]"></i>
+                    Projects
+                </a>
+            </nav>
+
+            <!-- Profile -->
+            <div class="p-4 border-t border-slate-100">
+                <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50">
+                    <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-semibold text-sm">
+                        DK
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-slate-800 truncate">Devesh Kirad</p>
+                        <p class="text-xs text-slate-400 truncate">CSE Student</p>
+                    </div>
+
+                    <button class="text-slate-400 hover:text-slate-700">
+                        <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </aside>
+
+
+    <!-- Main -->
+    <main class="lg:ml-[280px] min-h-screen">
+
+        <!-- Topbar -->
+        <header class="sticky top-0 z-20 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+            <div class="h-full max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+
+                <div class="flex items-center gap-3">
+
+                    <button id="menuBtn"
+                            class="lg:hidden w-10 h-10 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-50">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+
+                    <div class="hidden sm:flex items-center gap-2 text-sm text-slate-400">
+                        <i data-lucide="bug" class="w-4 h-4"></i>
+                        <span>Bug Journal</span>
+                    </div>
+
+                </div>
+
+                <!-- Global Search -->
+                <div class="hidden md:flex relative w-full max-w-md">
+                    <i data-lucide="search"
+                       class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+
+                    <input id="globalSearch"
+                           type="text"
+                           placeholder="Search DevVault..."
+                           class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 bg-white text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50">
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button class="w-10 h-10 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center">
+                        <i data-lucide="bell" class="w-4 h-4"></i>
+                    </button>
+
+                    <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-semibold">
+                        DK
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+
+        <!-- Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+            <!-- Page Header -->
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-8">
+
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-100 text-red-600 text-xs font-medium mb-3">
+                        <i data-lucide="bug" class="w-3.5 h-3.5"></i>
+                        Debugging Log
+                    </div>
+
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-slate-900">
+                        Bug Journal
+                    </h2>
+
+                    <p class="mt-2 text-sm text-slate-500 max-w-2xl">
+                        Record bugs, debugging experiences, root causes, and solutions so you can reuse what you learned later.
+                    </p>
+                </div>
+
+                <button id="addBugBtn"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium shadow-lg shadow-blue-200 transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    Add Bug
+                </button>
+
+            </div>
+
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+                <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400">Total Bugs</p>
+                            <p id="totalCount" class="text-2xl font-semibold text-slate-900 mt-1">0</p>
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                            <i data-lucide="bug" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400">Open</p>
+                            <p id="openCount" class="text-2xl font-semibold text-slate-900 mt-1">0</p>
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+                            <i data-lucide="circle-dot" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400">In Progress</p>
+                            <p id="progressCount" class="text-2xl font-semibold text-slate-900 mt-1">0</p>
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                            <i data-lucide="loader-circle" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-400">Resolved</p>
+                            <p id="resolvedCount" class="text-2xl font-semibold text-slate-900 mt-1">0</p>
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <i data-lucide="circle-check" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Search & Filters -->
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-card mb-6">
+
+                <div class="flex flex-col lg:flex-row gap-3">
+
+                    <!-- Search -->
+                    <div class="relative flex-1">
+                        <i data-lucide="search"
+                           class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+
+                        <input id="searchInput"
+                               type="text"
+                               placeholder="Search bugs, projects, causes, solutions..."
+                               class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 bg-slate-50 text-sm outline-none focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-50">
+                    </div>
+
+                    <!-- Status -->
+                    <select id="statusFilter"
+                            class="h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-600 outline-none focus:border-blue-400">
+                        <option value="all">All Status</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+
+                    <!-- Severity -->
+                    <select id="severityFilter"
+                            class="h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-600 outline-none focus:border-blue-400">
+                        <option value="all">All Severity</option>
+                        <option value="Critical">Critical</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Bug Results -->
+            <div class="flex items-center justify-between mb-4">
+                <p id="resultCount" class="text-sm text-slate-500"></p>
+
+                <button id="clearFilters"
+                        class="text-xs text-blue-600 hover:text-blue-700 hidden">
+                    Clear filters
+                </button>
+            </div>
+
+            <div id="bugGrid"
+                 class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState"
+                 class="hidden bg-white border border-dashed border-slate-300 rounded-xl p-12 text-center">
+
+                <div class="w-14 h-14 mx-auto rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center mb-4">
+                    <i data-lucide="bug-off" class="w-7 h-7"></i>
+                </div>
+
+                <h3 class="text-base font-semibold text-slate-800">
+                    No bugs found
+                </h3>
+
+                <p class="text-sm text-slate-400 mt-1">
+                    Try changing your search or filters.
+                </p>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- Add/Edit Modal -->
+    <div id="bugModal"
+         class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm modal-backdrop"></div>
+
+        <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl">
+
+            <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+                <div>
+                    <h3 id="modalTitle" class="text-lg font-semibold text-slate-900">
+                        Add Bug
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-1">
+                        Record the problem and what you learned from it.
+                    </p>
+                </div>
+
+                <button id="closeBugModal"
+                        class="w-9 h-9 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+
+            <form id="bugForm" class="p-6 space-y-5">
+
+                <input type="hidden" id="bugId">
+
+                <!-- Title -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                        Bug Title
+                    </label>
+
+                    <input id="bugTitle"
+                           type="text"
+                           required
+                           placeholder="e.g. Login form redirects to wrong page"
+                           class="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50">
+                </div>
+
+
+                <!-- Project + Date -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                            Project
+                        </label>
+
+                        <input id="bugProject"
+                               type="text"
+                               required
+                               placeholder="e.g. DevVault"
+                               class="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                            Date
+                        </label>
+
+                        <input id="bugDate"
+                               type="date"
+                               required
+                               class="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50">
+                    </div>
+
+                </div>
+
+
+                <!-- Status + Severity -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                            Status
+                        </label>
+
+                        <select id="bugStatus"
+                                class="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400">
+                            <option>Open</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                            Severity
+                        </label>
+
+                        <select id="bugSeverity"
+                                class="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400">
+                            <option>Low</option>
+                            <option>Medium</option>
+                            <option>High</option>
+                            <option>Critical</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <!-- Error -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                        Error / Problem
+                    </label>
+
+                    <textarea id="bugError"
+                              rows="3"
+                              placeholder="What went wrong?"
+                              class="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm outline-none resize-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50"></textarea>
+                </div>
+
+
+                <!-- Root Cause -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                        Root Cause
+                    </label>
+
+                    <textarea id="bugCause"
+                              rows="3"
+                              placeholder="Why did the problem happen?"
+                              class="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm outline-none resize-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50"></textarea>
+                </div>
+
+
+                <!-- Solution -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                        Solution
+                    </label>
+
+                    <textarea id="bugSolution"
+                              rows="3"
+                              placeholder="How did you solve it?"
+                              class="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm outline-none resize-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50"></textarea>
+                </div>
+
+
+                <!-- Tags -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                        Tags
+                    </label>
+
+                    <input id="bugTags"
+                           type="text"
+                           placeholder="javascript, api, frontend"
+                           class="w-full h-10 px-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50">
+
+                    <p class="text-[11px] text-slate-400 mt-1">
+                        Separate tags with commas.
+                    </p>
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="flex justify-end gap-3 pt-2">
+
+                    <button type="button"
+                            id="cancelBug"
+                            class="px-4 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                            class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">
+                        Save Bug
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- View Modal -->
+    <div id="viewModal"
+         class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm view-backdrop"></div>
+
+        <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl">
+
+            <div class="flex items-start justify-between px-6 py-5 border-b border-slate-100">
+
+                <div class="pr-4">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span id="viewSeverity"></span>
+                        <span id="viewStatus"></span>
+                    </div>
+
+                    <h3 id="viewTitle"
+                        class="text-xl font-semibold text-slate-900">
+                    </h3>
+
+                    <p id="viewMeta"
+                       class="text-xs text-slate-400 mt-1">
+                    </p>
+                </div>
+
+                <button id="closeViewModal"
+                        class="shrink-0 w-9 h-9 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+
+            </div>
+
+
+            <div class="p-6 space-y-5">
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                        Error / Problem
+                    </p>
+
+                    <div id="viewError"
+                         class="text-sm text-slate-600 bg-slate-50 rounded-lg p-4 whitespace-pre-line">
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                        Root Cause
+                    </p>
+
+                    <div id="viewCause"
+                         class="text-sm text-slate-600 bg-slate-50 rounded-lg p-4 whitespace-pre-line">
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                        Solution
+                    </p>
+
+                    <div id="viewSolution"
+                         class="text-sm text-slate-600 bg-emerald-50 rounded-lg p-4 whitespace-pre-line">
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                        Tags
+                    </p>
+
+                    <div id="viewTags"
+                         class="flex flex-wrap gap-2">
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
+
+                <button id="viewEditBtn"
+                        class="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50">
+                    Edit
+                </button>
+
+                <button id="viewDeleteBtn"
+                        class="px-4 py-2 rounded-lg bg-red-50 text-red-600 text-sm font-medium hover:bg-red-100">
+                    Delete
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Toast -->
+    <div id="toast"
+         class="fixed bottom-5 right-5 z-[60] translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+
+        <div class="flex items-center gap-3 px-4 py-3 bg-slate-900 text-white rounded-xl shadow-xl">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <span id="toastMessage" class="text-sm"></span>
+        </div>
+
+    </div>
+
+
+    <script src="assets/js/bug-journal.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
