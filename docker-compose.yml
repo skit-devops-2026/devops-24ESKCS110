@@ -1,0 +1,9 @@
+services:
+  devvault-frontend:
+    image: fsd-devops/devvault-frontend:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    restart: unless-stopped
