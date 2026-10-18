@@ -1,12 +1,15 @@
 const fs = require("fs");
 
 const requiredFiles = [
-    "frontend/index.html",
-    "frontend/login.html",
-    "frontend/register.html",
-    "frontend/dashboard.html",
-    "frontend/notes.html",
-    "frontend/snippets.html"
+    "react-frontend/package.json",
+    "react-frontend/package-lock.json",
+    "react-frontend/index.html",
+    "react-frontend/src/main.jsx",
+    "react-frontend/src/App.jsx",
+    "react-frontend/src/styles.css",
+    "Dockerfile",
+    "docker-compose.yml",
+    "nginx.conf"
 ];
 
 let failed = false;
