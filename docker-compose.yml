@@ -1,6 +1,6 @@
 services:
   devvault-frontend:
-    image: fsd-devops/devvault-frontend:1.0.0
+    image: ghcr.io/deveshkirad/devvault-frontend:1.0.0
     build:
       context: .
       dockerfile: Dockerfile
