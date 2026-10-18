@@ -1,0 +1,105 @@
+
+{
+  "id": null,
+  "uid": "devvault-overview",
+  "title": "DevVault - Nginx Monitoring",
+  "tags": ["devvault", "nginx", "m6"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "15s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Nginx Up",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "nginx_up",
+          "legendFormat": "Nginx Exporter",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 2,
+      "title": "Active Connections",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "nginx_connections_active",
+          "legendFormat": "Active",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      }
+    },
+    {
+      "id": 3,
+      "title": "HTTP Requests per Second",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "rate(nginx_http_requests_total[5m])",
+          "legendFormat": "Requests/sec",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": 4,
+      "title": "Prometheus Target Health",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "up",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      }
+    }
+  ]
+}
