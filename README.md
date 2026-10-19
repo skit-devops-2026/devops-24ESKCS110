@@ -23,4 +23,11 @@ DevVault is a Developer Knowledge Management Platform that acts as a personal "s
 
 ```bash
 make install
-make run
+make 
+```
+## Live URL
+
+https://devvault-frontend.onrender.com
+
+- **Platform:** Render
+- **Status:** Live
