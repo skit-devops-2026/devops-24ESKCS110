@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: devvault-frontend
-          image: ghcr.io/deveshkirad/devvault-frontend:1.0.0
+          image: ghcr.io/skit-devops-2026/devvault-frontend:1.0.0
           ports:
             - containerPort: 80
           readinessProbe:
