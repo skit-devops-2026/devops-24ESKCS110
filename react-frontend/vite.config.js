@@ -3,5 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/devops-24ESKCS110/',
+  base: process.env.GITHUB_PAGES === 'true'
+    ? '/devops-24ESKCS110/'
+    : '/',
 });
