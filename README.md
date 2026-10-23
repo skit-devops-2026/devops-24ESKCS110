@@ -27,6 +27,7 @@ make
 ```
 ## Live URL
 
-- **Live URL:** https://devault-frontend.onrender.com/
+Live URL: https://devault-frontend.onrender.com/
+
 - **Status:** Running (Production)
 - **Platform:** Render
