@@ -284,7 +284,7 @@ export function Auth({ register = false }) {
               <ArrowRight className="ml-1 inline" size={16} />
             </button>
             <p className="text-center text-xs leading-5 text-slate-400">
-              Demo authentication only. No server or real account is created.
+              Your account is securely authenticated through the DevVault API.
             </p>
           </form>
           <p className="mt-7 text-center text-sm text-slate-500">

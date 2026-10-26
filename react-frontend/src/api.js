@@ -1,4 +1,4 @@
-const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_URL || "https://devvault-api-hsp3.onrender.com/api").replace(/\/$/, "");
 
 export function getToken() {
   return localStorage.getItem("devvault_token") || "";
