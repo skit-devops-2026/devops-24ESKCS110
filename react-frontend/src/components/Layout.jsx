@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
+import { clearSession, getStoredUser } from "../api";
 import {
   BookOpen,
   LayoutDashboard,
@@ -29,9 +30,7 @@ export default function Layout({ children }) {
   const [mobile, setMobile] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  const user = JSON.parse(
-    localStorage.getItem("devvault_user") || '{"name":"Devesh"}',
-  );
+  const user = getStoredUser() || { name: "Developer", email: "" };
   const side = (
     <>
       <div className="flex items-center gap-3 px-6 py-6">
@@ -92,8 +91,8 @@ export default function Layout({ children }) {
           <button
             title="Log out"
             onClick={() => {
-              localStorage.removeItem("devvault_user");
-              navigate("/login");
+              clearSession();
+              navigate("/login", { replace: true });
             }}
             className="rounded-lg p-2 text-slate-400 hover:bg-white hover:text-red-500"
           >

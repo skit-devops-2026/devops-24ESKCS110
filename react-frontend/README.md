@@ -1,39 +1,41 @@
 # DevVault React Frontend
 
-This folder is the React/Vite frontend conversion of the existing DevVault HTML/CSS/JavaScript frontend. It is intended to live directly inside your existing `devops-24ESKCS110` project root as `react-frontend/`.
+React/Vite frontend for DevVault. This version connects the existing UI to the Express API and MongoDB-backed endpoints.
 
-## Pages converted
-- Landing page
-- Login and registration (demo-only local profile; no real authentication)
-- Dashboard
-- Notes
-- Code snippets
-- Resources
-- Bug journal
-- Projects
-- Global search
-- Profile/settings
+## Features
+- Real registration and login through the backend API
+- JWT-based authenticated API requests
+- Create, read, update, and delete for notes, snippets, resources, bug logs, and projects
+- API-backed global search and dashboard counts
+- Existing React UI and styling retained
 
 ## Run locally
-From the repository root:
+
+Ensure the backend is running at `http://localhost:5000` and `backend/.env` has:
+
+```env
+CLIENT_ORIGIN=http://localhost:5173
+```
+
+Then run:
 
 ```bash
 cd react-frontend
+cp .env.example .env
 npm install
 npm run dev
 ```
 
-Vite will print a local URL, usually `http://localhost:5173`.
+Open the URL printed by Vite, usually `http://localhost:5173`.
 
-To test a production build:
+## API configuration
 
-```bash
-npm run build
-```
+The default API base URL is `http://localhost:5000/api`. Set `VITE_API_URL` to your full API base URL (including `/api`) when deploying. The backend's `CLIENT_ORIGIN` must match the frontend origin. Never use `localhost` as the production API URL.
 
-## Notes
-- This is frontend-only. It does not create or require a backend or database.
-- The original `frontend/` folder and all root DevOps files are intentionally untouched. Keep them until you have checked the React version.
-- The UI uses React components, React Router, Lucide icons, Tailwind utility classes, and browser `localStorage` for demo data.
-- Authentication is simulated only. Do not use real credentials.
-- The initial sample data follows the existing HTML/JS frontend content; new and edited items persist in the current browser.
+## Data model notes
+
+- Bug journal fields align with the backend: `error`, `cause`, `solution`, `technology`, and optional `resourceLink`.
+- Project technologies are saved as `tags`, because the current backend schema does not define a `stack` field.
+- Browser localStorage stores only the session token and basic account profile; records are managed through the API.
+
+Keep secrets in backend `.env` only. Do not commit `.env` files.

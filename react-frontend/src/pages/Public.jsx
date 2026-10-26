@@ -13,6 +13,7 @@ import {
   Layers,
 } from "lucide-react";
 import { Field, inputClass } from "../components/UI";
+import { authApi, storeSession } from "../api";
 export function Landing() {
   return (
     <div className="grid-bg min-h-screen overflow-hidden">
@@ -68,8 +69,8 @@ export function Landing() {
             </Link>
           </div>
           <div className="mt-8 flex items-center gap-3 text-sm text-slate-500">
-            <ShieldCheck size={17} className="text-emerald-500" /> Frontend demo
-            · Your sample data stays in this browser
+            <ShieldCheck size={17} className="text-emerald-500" /> Secure account
+            · Your workspace syncs through the API
           </div>
         </div>
         <div className="relative">
@@ -156,8 +157,8 @@ export function Landing() {
           ],
           [
             ShieldCheck,
-            "Your local workspace",
-            "This frontend demo stores data in your browser.",
+            "Your personal workspace",
+            "Your saved records are connected to your account and database.",
           ],
         ].map(([Icon, title, desc]) => (
           <div
@@ -178,16 +179,23 @@ export function Auth({ register = false }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  function submit(e) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  async function submit(e) {
     e.preventDefault();
-    localStorage.setItem(
-      "devvault_user",
-      JSON.stringify({
-        name: name || email.split("@")[0] || "Developer",
-        email,
-      }),
-    );
-    navigate("/dashboard");
+    setBusy(true);
+    setError("");
+    try {
+      const result = register
+        ? await authApi.register({ name: name.trim(), email: email.trim(), password })
+        : await authApi.login({ email: email.trim(), password });
+      storeSession({ token: result.token, user: result.user });
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError(err.message || "Authentication failed. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   }
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
@@ -263,12 +271,12 @@ export function Auth({ register = false }) {
             <Field label="Password">
               <input
                 required
-                minLength="4"
+                minLength="8"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={inputClass}
-                placeholder="Enter any password for demo"
+                placeholder="At least 8 characters"
               />
             </Field>
             <button className="w-full rounded-xl bg-blue-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-200 hover:bg-blue-700">
@@ -276,7 +284,7 @@ export function Auth({ register = false }) {
               <ArrowRight className="ml-1 inline" size={16} />
             </button>
             <p className="text-center text-xs leading-5 text-slate-400">
-              Demo authentication only. No server or real account is created.
+              Your account is securely authenticated through the DevVault API.
             </p>
           </form>
           <p className="mt-7 text-center text-sm text-slate-500">
