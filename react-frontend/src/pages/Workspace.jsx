@@ -10,15 +10,15 @@ import {
   Clock3,
   Trash2,
   Edit3,
-  ExternalLink,
-  CheckCircle2,
-  Circle,
   Activity,
   Plus,
   Search,
   Save,
+  AlertCircle,
+  RefreshCw,
+  CheckCircle2,
 } from "lucide-react";
-import { loadData, saveData } from "../data";
+import { apiRequest, getStoredUser, itemApi } from "../api";
 import {
   PageHeader,
   SearchBox,
@@ -30,6 +30,8 @@ import {
   Toast,
   OutLink,
 } from "../components/UI";
+
+const kinds = ["notes", "snippets", "resources", "bugs", "projects"];
 const configs = {
   notes: {
     title: "Notes",
@@ -39,10 +41,10 @@ const configs = {
     icon: NotebookPen,
     action: "New note",
     fields: [
-      ["title", "Title"],
-      ["category", "Category"],
-      ["content", "Content"],
-      ["tags", "Tags (comma separated)"],
+      ["title", "Title", "text", true],
+      ["category", "Category", "text"],
+      ["content", "Content", "textarea", true],
+      ["tags", "Tags (comma separated)", "text"],
     ],
   },
   snippets: {
@@ -52,11 +54,11 @@ const configs = {
     icon: Code2,
     action: "New snippet",
     fields: [
-      ["title", "Title"],
-      ["language", "Language"],
-      ["description", "Description"],
-      ["code", "Code"],
-      ["tags", "Tags (comma separated)"],
+      ["title", "Title", "text", true],
+      ["language", "Language", "text", true],
+      ["description", "Description", "textarea"],
+      ["code", "Code", "code", true],
+      ["tags", "Tags (comma separated)", "text"],
     ],
   },
   resources: {
@@ -67,11 +69,11 @@ const configs = {
     icon: Bookmark,
     action: "Add resource",
     fields: [
-      ["title", "Title"],
-      ["type", "Type"],
-      ["url", "URL"],
-      ["description", "Description"],
-      ["tags", "Tags (comma separated)"],
+      ["title", "Title", "text", true],
+      ["type", "Type", "select", true],
+      ["url", "URL", "url", true],
+      ["description", "Description", "textarea"],
+      ["tags", "Tags (comma separated)", "text"],
     ],
   },
   bugs: {
@@ -82,104 +84,147 @@ const configs = {
     icon: Bug,
     action: "Log a bug",
     fields: [
-      ["title", "Bug title"],
-      ["description", "Description"],
-      ["severity", "Severity"],
-      ["status", "Status"],
-      ["tags", "Tags (comma separated)"],
+      ["title", "Bug title", "text", true],
+      ["error", "Error / description", "textarea", true],
+      ["cause", "Root cause", "textarea", true],
+      ["solution", "Solution / fix", "textarea", true],
+      ["technology", "Technology", "text", true],
+      ["resourceLink", "Related link (optional)", "url"],
+      ["tags", "Tags (comma separated)", "text"],
     ],
   },
   projects: {
     title: "Projects",
     eyebrow: "Project tracker",
     description:
-      "Keep a lightweight overview of what you are building and the stack behind it.",
+      "Keep a lightweight overview of what you are building and its current status.",
     icon: FolderKanban,
     action: "New project",
     fields: [
-      ["title", "Project name"],
-      ["description", "Description"],
-      ["status", "Status"],
-      ["stack", "Tech stack (comma separated)"],
+      ["title", "Project name", "text", true],
+      ["description", "Description", "textarea"],
+      ["status", "Status", "project-status", true],
+      ["tags", "Technologies / tags (comma separated)", "text"],
     ],
   },
 };
-function normalise(field, value) {
-  return ["tags", "stack"].includes(field)
-    ? Array.isArray(value)
-      ? value.join(", ")
-      : value || ""
-    : value || "";
+const selectOptions = {
+  type: [
+    "Documentation",
+    "Tutorial",
+    "Article",
+    "Tool",
+    "Book",
+    "Video",
+    "Other",
+  ],
+  status: ["Planned", "Planning", "Active", "In Progress", "Completed"],
+};
+const itemId = (item) => item._id || item.id;
+const itemText = (item) =>
+  Object.values(item).flat().filter(Boolean).join(" ").toLowerCase();
+const tagsFromForm = (value) =>
+  String(value || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+function displayDate(item) {
+  const date = item.updatedAt || item.createdAt;
+  if (!date) return "Saved";
+  return new Date(date).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
-function itemText(item) {
-  return Object.values(item).flat().join(" ").toLowerCase();
-}
+
 export function Collection({ kind }) {
   const cfg = configs[kind];
-  const [items, setItems] = useState(() => loadData(kind));
+  const [items, setItems] = useState([]);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All");
   const [editing, setEditing] = useState(null);
-  const [toast, setToast] = useState("");
   const [form, setForm] = useState({});
-  useEffect(() => saveData(kind, items), [kind, items]);
+  const [toast, setToast] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+
+  async function loadItems() {
+    setLoading(true);
+    setError("");
+    try {
+      setItems(await itemApi.list(kind));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    loadItems();
+  }, [kind]);
+
   const filtered = useMemo(
     () =>
       items.filter(
-        (x) =>
-          itemText(x).includes(query.toLowerCase()) &&
-          (filter === "All" || x.status === filter || x.severity === filter),
+        (item) =>
+          itemText(item).includes(query.toLowerCase()) &&
+          (filter === "All" || item.status === filter),
       ),
     [items, query, filter],
   );
+
   function start(item = null) {
     setEditing(item || false);
-    setForm(
-      item
-        ? Object.fromEntries(
-            cfg.fields.map(([f]) => [f, normalise(f, item[f])]),
-          )
-        : {},
-    );
+    const next = {};
+    cfg.fields.forEach(([field]) => {
+      const value = item?.[field];
+      next[field] = field === "tags" ? (value || []).join(", ") : value || "";
+    });
+    setForm(next);
+    setError("");
   }
-  function save(e) {
+
+  async function save(e) {
     e.preventDefault();
-    const data = { ...form, id: editing?.id || `${kind[0]}${Date.now()}` };
-    for (const [f] of cfg.fields) {
-      if (["tags", "stack"].includes(f))
-        data[f] = (form[f] || "")
-          .split(",")
-          .map((x) => x.trim())
-          .filter(Boolean);
+    setBusy(true);
+    setError("");
+    const payload = { ...form, tags: tagsFromForm(form.tags) };
+    if (kind === "notes") {
+      payload.content = String(form.content || "");
     }
-    if (kind === "bugs" && !editing) data.created = "Today";
-    setItems((old) =>
-      editing
-        ? old.map((x) => (x.id === editing.id ? data : x))
-        : [data, ...old],
-    );
-    setEditing(null);
-    setToast(editing ? "Changes saved" : "Item added");
+    try {
+      if (editing && editing !== false)
+        await itemApi.update(kind, itemId(editing), payload);
+      else await itemApi.create(kind, payload);
+      setEditing(null);
+      setToast(editing && editing !== false ? "Changes saved" : "Item added");
+      await loadItems();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
   }
-  function remove(id) {
-    if (!confirm("Delete this item?")) return;
-    setItems((old) => old.filter((x) => x.id !== id));
-    setToast("Item deleted");
+
+  async function remove(id) {
+    if (!confirm("Delete this item permanently?")) return;
+    setError("");
+    try {
+      await itemApi.remove(kind, id);
+      setItems((old) => old.filter((item) => itemId(item) !== id));
+      setToast("Item deleted");
+    } catch (err) {
+      setError(err.message);
+    }
   }
+
   const filters =
     kind === "bugs"
-      ? [
-          "All",
-          "Open",
-          "In Progress",
-          "Resolved",
-          "Critical",
-          "High",
-          "Medium",
-          "Low",
-        ]
+      ? ["All"]
       : kind === "projects"
-        ? ["All", "Planning", "In Progress", "Completed"]
+        ? ["All", ...selectOptions.status]
         : ["All"];
   const Icon = cfg.icon;
   return (
@@ -202,39 +247,40 @@ export function Collection({ kind }) {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         >
-          {filters.map((x) => (
-            <option key={x}>{x}</option>
+          {filters.map((value) => (
+            <option key={value}>{value}</option>
           ))}
         </select>
       </div>
+      {error && (
+        <div
+          role="alert"
+          className="mb-5 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+        >
+          <AlertCircle size={17} className="mt-0.5 shrink-0" />
+          <span>{error}</span>
+          <button className="ml-auto font-semibold" onClick={loadItems}>
+            Retry
+          </button>
+        </div>
+      )}
       {kind === "bugs" && (
         <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-          {[
-            ["Total", items.length, "text-slate-900"],
-            [
-              "Open",
-              items.filter((x) => x.status === "Open").length,
-              "text-red-600",
-            ],
-            [
-              "In progress",
-              items.filter((x) => x.status === "In Progress").length,
-              "text-amber-600",
-            ],
-            [
-              "Resolved",
-              items.filter((x) => x.status === "Resolved").length,
-              "text-emerald-600",
-            ],
-          ].map(([t, n, c]) => (
-            <div
-              key={t}
-              className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm"
-            >
-              <div className="text-xs font-medium text-slate-400">{t}</div>
-              <div className={`mt-1 text-2xl font-bold ${c}`}>{n}</div>
-            </div>
-          ))}
+          {[["Total", items.length, "text-slate-900"]].map(
+            ([label, count, color]) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm"
+              >
+                <div className="text-xs font-medium text-slate-400">
+                  {label}
+                </div>
+                <div className={`mt-1 text-2xl font-bold ${color}`}>
+                  {count}
+                </div>
+              </div>
+            ),
+          )}
         </div>
       )}
       <div className="mb-4 flex items-center justify-between text-xs text-slate-400">
@@ -242,10 +288,15 @@ export function Collection({ kind }) {
           {filtered.length} {filtered.length === 1 ? "item" : "items"}
         </span>
         <span className="flex items-center gap-1">
-          <Activity size={13} /> Saved in this browser
+          <Activity size={13} /> Synced with your account
         </span>
       </div>
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white p-12 text-sm text-slate-500">
+          <RefreshCw size={17} className="animate-spin" /> Loading from DevVault
+          API…
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState
           title={
             query ? "No matching results" : `No ${cfg.title.toLowerCase()} yet`
@@ -260,7 +311,7 @@ export function Collection({ kind }) {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filtered.map((item) => (
             <article
-              key={item.id}
+              key={itemId(item)}
               className="group flex min-w-0 flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-soft"
             >
               <div className="mb-4 flex items-start justify-between gap-3">
@@ -277,7 +328,7 @@ export function Collection({ kind }) {
                   </button>
                   <button
                     title="Delete"
-                    onClick={() => remove(item.id)}
+                    onClick={() => remove(itemId(item))}
                     className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-600"
                   >
                     <Trash2 size={15} />
@@ -293,39 +344,28 @@ export function Collection({ kind }) {
                 {item.type && <Badge color="green">{item.type}</Badge>}
                 {item.status && (
                   <Badge
-                    color={
-                      item.status === "Resolved" || item.status === "Completed"
-                        ? "green"
-                        : item.status === "Open"
-                          ? "red"
-                          : "amber"
-                    }
+                    color={item.status === "Completed" ? "green" : "amber"}
                   >
                     {item.status}
                   </Badge>
                 )}
-                {item.severity && (
-                  <Badge
-                    color={
-                      item.severity === "Critical" || item.severity === "High"
-                        ? "red"
-                        : item.severity === "Medium"
-                          ? "amber"
-                          : "slate"
-                    }
-                  >
-                    {item.severity}
-                  </Badge>
+                {item.technology && (
+                  <Badge color="purple">{item.technology}</Badge>
                 )}
               </div>
-              {item.description && (
-                <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-500">
-                  {item.description}
+              {(item.description || item.content || item.error) && (
+                <p className="mt-3 line-clamp-3 whitespace-pre-wrap text-sm leading-6 text-slate-500">
+                  {item.description || item.content || item.error}
                 </p>
               )}
-              {item.content && (
-                <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-500">
-                  {item.content}
+              {item.cause && (
+                <p className="mt-2 text-xs text-slate-500">
+                  <strong>Cause:</strong> {item.cause}
+                </p>
+              )}
+              {item.solution && (
+                <p className="mt-2 text-xs text-slate-500">
+                  <strong>Solution:</strong> {item.solution}
                 </p>
               )}
               {item.code && (
@@ -333,19 +373,19 @@ export function Collection({ kind }) {
                   {item.code}
                 </pre>
               )}
-              {item.url && (
+              {(item.url || item.resourceLink) && (
                 <div className="mt-4 truncate">
-                  <OutLink href={item.url} />
+                  <OutLink href={item.url || item.resourceLink} />
                 </div>
               )}
-              {(item.tags || item.stack || []).length > 0 && (
+              {(item.tags || []).length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-1.5">
-                  {(item.tags || item.stack || []).map((t) => (
+                  {item.tags.map((tag) => (
                     <span
-                      key={t}
+                      key={tag}
                       className="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-500"
                     >
-                      #{t}
+                      #{tag}
                     </span>
                   ))}
                 </div>
@@ -353,31 +393,10 @@ export function Collection({ kind }) {
               <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 mt-5 text-xs text-slate-400">
                 <span className="flex items-center gap-1">
                   <Clock3 size={13} />
-                  {item.updated || item.created || "Saved"}
+                  {displayDate(item)}
                 </span>
-                {kind === "bugs" && (
-                  <button
-                    onClick={() => {
-                      const status =
-                        item.status === "Open"
-                          ? "In Progress"
-                          : item.status === "In Progress"
-                            ? "Resolved"
-                            : "Open";
-                      setItems((old) =>
-                        old.map((x) =>
-                          x.id === item.id ? { ...x, status } : x,
-                        ),
-                      );
-                      setToast(`Marked ${status.toLowerCase()}`);
-                    }}
-                    className="font-semibold text-blue-600"
-                  >
-                    Change status →
-                  </button>
-                )}
                 {kind === "projects" && (
-                  <span>{(item.stack || []).length} technologies</span>
+                  <span>{(item.tags || []).length} technologies</span>
                 )}
               </div>
             </article>
@@ -386,86 +405,61 @@ export function Collection({ kind }) {
       )}
       {editing !== null && (
         <Modal
-          title={editing?.id ? "Edit item" : cfg.action}
+          title={editing?.["_id"] || editing?.id ? "Edit item" : cfg.action}
           onClose={() => setEditing(null)}
         >
           <form onSubmit={save} className="space-y-4">
-            {cfg.fields.map(([field, label]) => (
+            {cfg.fields.map(([field, label, type, required]) => (
               <Field key={field} label={label}>
-                {field === "content" ||
-                (field === "description" && kind !== "resources") ? (
+                {type === "textarea" || type === "code" ? (
                   <textarea
-                    required
-                    rows={3}
-                    className={inputClass}
+                    required={Boolean(required)}
+                    rows={type === "code" ? 6 : 3}
+                    className={`${inputClass} ${type === "code" ? "font-mono text-xs" : ""}`}
                     value={form[field] || ""}
                     onChange={(e) =>
                       setForm({ ...form, [field]: e.target.value })
                     }
                   />
-                ) : field === "code" ? (
-                  <textarea
-                    required
-                    rows={6}
-                    className={`${inputClass} font-mono text-xs`}
-                    value={form[field] || ""}
-                    onChange={(e) =>
-                      setForm({ ...form, [field]: e.target.value })
-                    }
-                  />
-                ) : ["status", "severity", "type"].includes(field) ? (
+                ) : type === "select" || type === "project-status" ? (
                   <select
+                    required={Boolean(required)}
                     className={inputClass}
                     value={
                       form[field] ||
-                      (field === "status"
-                        ? kind === "bugs"
-                          ? "Open"
-                          : "Planning"
-                        : field === "severity"
-                          ? "Medium"
-                          : "Documentation")
+                      (field === "status" ? "Planned" : "Documentation")
                     }
                     onChange={(e) =>
                       setForm({ ...form, [field]: e.target.value })
                     }
                   >
-                    {(field === "status"
-                      ? kind === "bugs"
-                        ? ["Open", "In Progress", "Resolved"]
-                        : ["Planning", "In Progress", "Completed"]
-                      : field === "severity"
-                        ? ["Critical", "High", "Medium", "Low"]
-                        : [
-                            "Documentation",
-                            "Tutorial",
-                            "Article",
-                            "Tool",
-                            "Book",
-                            "Video",
-                          ]
-                    ).map((x) => (
-                      <option key={x}>{x}</option>
-                    ))}
+                    {(selectOptions[field] || selectOptions.status).map(
+                      (value) => (
+                        <option key={value}>{value}</option>
+                      ),
+                    )}
                   </select>
                 ) : (
                   <input
-                    required={["title", "url"].includes(field)}
-                    type={field === "url" ? "url" : "text"}
+                    required={Boolean(required)}
+                    type={type === "url" ? "url" : "text"}
                     className={inputClass}
                     value={form[field] || ""}
                     onChange={(e) =>
                       setForm({ ...form, [field]: e.target.value })
                     }
                     placeholder={
-                      field === "tags" || field === "stack"
-                        ? "Separate values with commas"
-                        : ""
+                      field === "tags" ? "Separate values with commas" : ""
                     }
                   />
                 )}
               </Field>
             ))}
+            {error && (
+              <p role="alert" className="text-sm text-red-600">
+                {error}
+              </p>
+            )}
             <div className="flex justify-end gap-3 pt-2">
               <button
                 type="button"
@@ -474,8 +468,12 @@ export function Collection({ kind }) {
               >
                 Cancel
               </button>
-              <button className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white">
-                <Save className="mr-1 inline" size={15} /> Save item
+              <button
+                disabled={busy}
+                className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+              >
+                <Save className="mr-1 inline" size={15} />
+                {busy ? "Saving…" : "Save item"}
               </button>
             </div>
           </form>
@@ -485,20 +483,22 @@ export function Collection({ kind }) {
     </>
   );
 }
+
 export function Dashboard() {
   const [counts, setCounts] = useState({});
-  useEffect(
-    () =>
-      setCounts(
-        Object.fromEntries(
-          ["notes", "snippets", "resources", "bugs", "projects"].map((k) => [
-            k,
-            loadData(k).length,
-          ]),
-        ),
-      ),
-    [],
-  );
+  const [error, setError] = useState("");
+  const user = getStoredUser() || { name: "Developer" };
+  useEffect(() => {
+    Promise.all(
+      kinds.map(async (kind) => [
+        kind,
+        (await itemApi.list(kind, { limit: 100, page: 1, archived: "false" }))
+          .length,
+      ]),
+    )
+      .then((pairs) => setCounts(Object.fromEntries(pairs)))
+      .catch((err) => setError(err.message));
+  }, []);
   const cards = [
     [
       "Notes",
@@ -548,17 +548,11 @@ export function Dashboard() {
           <Activity size={14} /> Your workspace at a glance
         </div>
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Welcome back,{" "}
-          {
-            JSON.parse(
-              localStorage.getItem("devvault_user") || '{"name":"Devesh"}',
-            ).name
-          }
-          .
+          Welcome back, {user.name || "Developer"}.
         </h1>
         <p className="mt-3 max-w-xl text-sm leading-6 text-blue-100 sm:text-base">
-          Keep your learning momentum. Everything you save today makes the next
-          problem easier to solve.
+          Your knowledge is now saved to your account and backed by the DevVault
+          API.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
@@ -575,6 +569,14 @@ export function Dashboard() {
           </Link>
         </div>
       </div>
+      {error && (
+        <p
+          role="alert"
+          className="mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700"
+        >
+          {error}
+        </p>
+      )}
       <div className="mb-5 flex items-end justify-between">
         <div>
           <div className="text-xs font-bold uppercase tracking-[.2em] text-blue-600">
@@ -606,7 +608,7 @@ export function Dashboard() {
             </div>
             <div className="mt-5 flex items-baseline gap-2">
               <h3 className="text-lg font-bold">{title}</h3>
-              <span className="text-xs text-slate-400">{count ?? 0}</span>
+              <span className="text-xs text-slate-400">{count ?? "…"}</span>
             </div>
             <p className="mt-1 text-sm text-slate-500">{desc}</p>
           </Link>
@@ -622,8 +624,8 @@ export function Dashboard() {
               Keep your knowledge reusable
             </h3>
             <p className="mt-1 text-sm leading-6 text-slate-500">
-              When you solve a bug or learn a new concept, capture the fix as a
-              note or snippet so you can find it again.
+              Create notes, snippets, and debugging records; they will be stored
+              in your authenticated workspace.
             </p>
           </div>
         </div>
@@ -631,21 +633,46 @@ export function Dashboard() {
     </>
   );
 }
+
 export function SearchPage() {
   const [params] = useSearchParams();
   const [q, setQ] = useState(params.get("q") || "");
-  const all = useMemo(
-    () =>
-      ["notes", "snippets", "resources", "bugs", "projects"].flatMap((k) =>
-        loadData(k).map((item) => ({ ...item, _kind: k, _path: "/" + k })),
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let active = true;
+    if (!q.trim()) {
+      setResults([]);
+      return () => {
+        active = false;
+      };
+    }
+    setLoading(true);
+    setError("");
+    Promise.all(
+      kinds.map(async (kind) =>
+        (await itemApi.list(kind, { q: q.trim(), limit: 100 })).map((item) => ({
+          ...item,
+          id: itemId(item),
+          _kind: kind,
+          _path: `/${kind}`,
+        })),
       ),
-    [],
-  );
-  const results = all.filter(
-    (x) =>
-      q &&
-      Object.values(x).flat().join(" ").toLowerCase().includes(q.toLowerCase()),
-  );
+    )
+      .then((groups) => {
+        if (active) setResults(groups.flat());
+      })
+      .catch((err) => {
+        if (active) setError(err.message);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [q]);
   return (
     <>
       <PageHeader
@@ -660,6 +687,14 @@ export function SearchPage() {
           placeholder="Try React, Docker, authentication..."
         />
       </div>
+      {error && (
+        <p
+          role="alert"
+          className="mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700"
+        >
+          {error}
+        </p>
+      )}
       {!q ? (
         <div className="rounded-2xl border border-slate-200 bg-white px-6 py-14 text-center">
           <Search className="mx-auto mb-4 text-blue-500" size={28} />
@@ -668,17 +703,21 @@ export function SearchPage() {
             Start typing to find saved items across all modules.
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {["React", "Docker", "Git", "Authentication"].map((t) => (
+            {["React", "Docker", "Git", "Authentication"].map((term) => (
               <button
-                key={t}
-                onClick={() => setQ(t)}
+                key={term}
+                onClick={() => setQ(term)}
                 className="rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-500 hover:border-blue-200 hover:text-blue-600"
               >
-                {t}
+                {term}
               </button>
             ))}
           </div>
         </div>
+      ) : loading ? (
+        <p className="p-8 text-center text-sm text-slate-500">
+          Searching your saved records…
+        </p>
       ) : results.length === 0 ? (
         <EmptyState
           title="No results found"
@@ -708,7 +747,11 @@ export function SearchPage() {
               <div className="min-w-0 flex-1">
                 <div className="font-semibold">{item.title}</div>
                 <div className="mt-1 truncate text-sm text-slate-500">
-                  {item.description || item.content || item.code || ""}
+                  {item.description ||
+                    item.content ||
+                    item.error ||
+                    item.code ||
+                    ""}
                 </div>
               </div>
               <Badge>{item._kind}</Badge>
@@ -719,76 +762,66 @@ export function SearchPage() {
     </>
   );
 }
+
 export function SettingsPage() {
-  const [user, setUser] = useState(() =>
-    JSON.parse(
-      localStorage.getItem("devvault_user") || '{"name":"Devesh","email":""}',
-    ),
-  );
+  const user = getStoredUser() || { name: "Developer", email: "" };
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  async function verifyAccount() {
+    setMessage("");
+    setError("");
+    try {
+      const result = await apiRequest("/auth/me");
+      setMessage(`Connected as ${result.user.email}`);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
   return (
     <>
       <PageHeader
-        eyebrow="Personalize"
+        eyebrow="Account"
         title="Settings"
-        description="Manage your local profile and your browser-stored workspace data."
+        description="View your authenticated DevVault account and API connection."
       />
       <div className="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-5 text-lg font-bold">Profile details</h2>
-        <form
-          className="space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            localStorage.setItem("devvault_user", JSON.stringify(user));
-            setMessage("Profile saved successfully");
-          }}
-        >
+        <h2 className="mb-5 text-lg font-bold">Account details</h2>
+        <div className="space-y-4">
           <Field label="Display name">
             <input
-              className={inputClass}
+              readOnly
+              className={`${inputClass} bg-slate-50`}
               value={user.name || ""}
-              onChange={(e) => setUser({ ...user, name: e.target.value })}
             />
           </Field>
           <Field label="Email">
             <input
+              readOnly
               type="email"
-              className={inputClass}
+              className={`${inputClass} bg-slate-50`}
               value={user.email || ""}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
           </Field>
-          <button className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white">
-            Save profile
-          </button>
-          {message && (
-            <span className="ml-3 text-sm text-emerald-600">{message}</span>
-          )}
-        </form>
-        <div className="mt-8 border-t border-slate-100 pt-6">
-          <h3 className="font-semibold">Demo data</h3>
-          <p className="mt-1 text-sm text-slate-500">
-            Your entries are saved in this browser using localStorage. There is
-            no backend or database connection yet.
-          </p>
           <button
-            onClick={() => {
-              if (confirm("Clear all DevVault demo data from this browser?")) {
-                [
-                  "notes",
-                  "snippets",
-                  "resources",
-                  "bugs",
-                  "projects",
-                  "user",
-                ].forEach((k) => localStorage.removeItem("devvault_" + k));
-                window.location.reload();
-              }
-            }}
-            className="mt-4 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50"
+            onClick={verifyAccount}
+            className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white"
           >
-            Clear local data
+            Verify API connection
           </button>
+          {message && <p className="text-sm text-emerald-600">{message}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-red-600">
+              {error}
+            </p>
+          )}
+        </div>
+        <div className="mt-8 border-t border-slate-100 pt-6">
+          <h3 className="font-semibold">Data storage</h3>
+          <p className="mt-1 text-sm leading-6 text-slate-500">
+            Your records are stored in MongoDB through the authenticated
+            DevVault API. Your browser stores the session token and basic
+            account details.
+          </p>
         </div>
       </div>
     </>
